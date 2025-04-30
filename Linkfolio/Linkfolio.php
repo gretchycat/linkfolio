@@ -2,7 +2,7 @@
 /*
 Plugin Name: Linkfolio
 Description: Create, manage, and display custom link collections with categories, automatic title/icon fetching, and post/page link detection.
-Version: 0.1.2
+Version: 0.1.3
 Author: Gretchen Maculo
 */
 
