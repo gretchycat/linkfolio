@@ -1,0 +1,67 @@
+<?php
+// link-loop.php
+
+defined('ABSPATH') || exit;
+
+function lm_render_all_links() {
+    global $wpdb;
+    $table = $wpdb->prefix . 'custom_links';
+    $links = $wpdb->get_results("SELECT * FROM $table ORDER BY id ASC");
+
+    foreach ($links as $link) {
+        $id = $link->id;
+        if (isset($_POST["edit_link_$id"])) {
+            lm_render_link_row_editor($link);
+        } elseif (isset($_POST["saved_link_$id"])) {
+            lm_render_link_row_view($link);
+        } elseif (isset($_POST["cancel_link_triggered_$id"])) {
+            lm_render_link_row_view($link);
+        } else {
+            lm_render_link_row_view($link);
+        }
+    }
+
+    if (isset($_POST['add_new_link'])) {
+        lm_render_link_row_editor((object)['id' => 'new', 'label' => '', 'url' => '', 'icon_url' => '', 'description' => '', 'category_slug' => 'uncategorized']);
+    }
+
+    echo '<p><button class="button" name="add_new_link" value="1">+ Add Link</button></p>';
+}
+
+function lm_render_links_by_category($slug) {
+    global $wpdb;
+    $table = $wpdb->prefix . 'custom_links';
+    $links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $slug));
+
+    foreach ($links as $link) {
+        $id = $link->id;
+        if (isset($_POST["edit_link_$id"])) {
+            lm_render_link_row_editor($link);
+        } elseif (isset($_POST["saved_link_$id"])) {
+            lm_render_link_row_view($link);
+        } elseif (isset($_POST["cancel_link_triggered_$id"])) {
+            lm_render_link_row_view($link);
+        } else {
+            lm_render_link_row_view($link);
+        }
+    }
+}
+
+function lm_render_broken_links() {
+    global $wpdb;
+    $table = $wpdb->prefix . 'custom_links';
+    $links = $wpdb->get_results("SELECT * FROM $table WHERE label = '404' ORDER BY id ASC");
+
+    foreach ($links as $link) {
+        $id = $link->id;
+        if (isset($_POST["edit_link_$id"])) {
+            lm_render_link_row_editor($link);
+        } elseif (isset($_POST["saved_link_$id"])) {
+            lm_render_link_row_view($link);
+        } elseif (isset($_POST["cancel_link_triggered_$id"])) {
+            lm_render_link_row_view($link);
+        } else {
+            lm_render_link_row_view($link);
+        }
+    }
+}

@@ -1,0 +1,94 @@
+/* General Layout */
+.lm-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 1em;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5em;
+  border-radius: 6px;
+}
+
+.lm-tab-button {
+  border: 1px solid #888;
+  background: transparent;
+  color: inherit;
+  padding: 0.25em 0.75em;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.lm-tab-button[data-tab="tab-broken"] {
+  color: #d33;
+  border-color: #d33;
+}
+
+.lm-tab-content {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1em;
+  margin-bottom: 2em;
+  border-radius: 8px;
+}
+
+/* Category Viewer and Editor */
+.lm-cat-row {
+  border-bottom: 1px solid #444;
+  padding: 1em 0;
+  font-size: 1em;
+}
+
+.lm-cat-top,
+.lm-cat-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 0.5em;
+}
+
+.lm-cat-top label,
+.lm-cat-bottom label {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.lm-cat-top input[type="text"],
+.lm-cat-top select {
+  font-size: 1em;
+  padding: 0.2em 0.4em;
+  max-width: 10ch;
+}
+
+.lm-cat-bottom input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 0.3em;
+}
+
+/* Link Row Styling */
+.lm-link-row {
+  display: flex;
+  gap: 1em;
+  padding: 1em 0;
+  border-bottom: 1px solid #444;
+  align-items: flex-start;
+}
+
+.lm-link-label {
+  font-weight: bold;
+  margin-bottom: 0.25em;
+}
+
+.lm-link-meta {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+/* Buttons */
+button.button,
+input[type="submit"].button {
+  font-size: 0.9em;
+  padding: 0.3em 0.75em;
+  margin: 0.25em 0;
+}
