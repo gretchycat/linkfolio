@@ -18,7 +18,7 @@ function lm_detect_links_in_post($post_id, $post) {
     global $wpdb;
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    error_log('found ' . count($matches) . 'links.')
+    error_log('found ' . count($matches) . 'links.');
     foreach ($matches as $m) {
         error_log('found ' . $m );
         $url = esc_url_raw(trim($m[1]));
