@@ -10,7 +10,7 @@ function lm_detect_links_in_post($post_id, $post) {
     error_log('detect links enabled' );
     $content = stripslashes($post->post_content);
     if (!is_string($content)) return;
-    error_log('content is a string');
+    error_log("content is a string\n".$content');
 
     preg_match_all('/<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is', $content, $matches, PREG_SET_ORDER);
     if (!$matches) return;
