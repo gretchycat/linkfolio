@@ -20,6 +20,7 @@ function lm_detect_links_in_post($post_id, $post) {
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
 
     foreach ($matches as $m) {
+        error_log('found ' . $m );
         $url = esc_url_raw(trim($m[1]));
         $label = wp_strip_all_tags($m[2]);
         if (empty($url)) continue;
