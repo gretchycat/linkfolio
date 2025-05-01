@@ -45,7 +45,7 @@ function lm_render_link_settings_page() {
     echo '<a href="#tab-broken" class="lm-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a>';
     echo '</div>';
     echo '<form method="post" class="lm-linkfolio-form">';
-  // all the buttons and link/category rows here
+    // all the buttons and link/category rows here
 
     // Render category-based link sections
     foreach ($categories as $cat) {
