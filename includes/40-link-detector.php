@@ -6,13 +6,16 @@ function lm_detect_links_in_post($post_id, $post) {
     if (!isset($post['lm_detect_external']) && !isset($post['lm_detect_internal']) && !isset($post['lm_detect_email'])) {
         return;
     }
-    
+
     error_log('detect links enabled' );
-    $content = stripslashes($post->post_content);
+    $content = $post->post_content;
     if (!is_string($content)) return;
     error_log("content is a string\n".$content');
 
-    preg_match_all('/<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is', $content, $matches, PREG_SET_ORDER);
+    preg_match_all('/<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is',
+        stripslashes($content),
+        $matches,
+        PREG_SET_ORDER);
     if (!$matches) return;
 
     $added = 0;
