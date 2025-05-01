@@ -67,22 +67,24 @@ function lm_save_link_meta_box($post_id)
             ]);
         }
     }
-    error_log( 'attached links to the page')
-        ;
+    error_log( 'attached links to the page');
     if (!empty($_POST['lm_detect_external']))
     {
+        error_log( 'scan external');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> External link detection is enabled.</p></div>';
         });
     }
     if (!empty($_POST['lm_detect_internal']))
     {
+        error_log( 'scan internal');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Internal link detection is enabled.</p></div>';
         });
     }
     if (!empty($_POST['lm_detect_emails']))
     {
+        error_log( 'scan email');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Email link detection is enabled.</p></div>';
         });
@@ -91,6 +93,7 @@ function lm_save_link_meta_box($post_id)
     // Handle auto-detect links if requested
     if (!empty($_POST['lm_detect_external']) || !empty($_POST['lm_detect_internal']) || !empty($_POST['lm_detect_emails']))
     {
+        error_log( 'detect linjs');
         lm_detect_links_in_post($post_id, $_POST);
     }
 }
