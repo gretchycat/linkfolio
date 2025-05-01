@@ -54,34 +54,11 @@ function lm_save_link_meta_box($post_id)
     $wpdb->delete($assoc_table, ['post_id' => $post_id]);
 
     if (!empty($_POST['lm_links']) && is_array($_POST['lm_links']))
-    {
         foreach ($_POST['lm_links'] as $link_id)
-        {
             $wpdb->insert($assoc_table, [
                 'post_id' => $post_id,
                 'link_id' => intval($link_id),
             ]);
-        }
-    }
-    if (!empty($_POST['lm_detect_external']))
-    {
-        add_action('admin_notices', function () {
-            echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> External link detection is enabled.</p></div>';
-        });
-    }
-    if (!empty($_POST['lm_detect_internal']))
-    {
-        add_action('admin_notices', function () {
-            echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Internal link detection is enabled.</p></div>';
-        });
-    }
-    if (!empty($_POST['lm_detect_emails']))
-    {
-        add_action('admin_notices', function () {
-            echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Email link detection is enabled.</p></div>';
-        });
-    }
-
     // Handle auto-detect links if requested
     lm_detect_links_in_post($post_id, $_POST);
 }
