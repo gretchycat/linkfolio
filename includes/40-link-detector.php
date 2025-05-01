@@ -3,7 +3,7 @@
 defined('ABSPATH') || exit;
 
 function lm_detect_links_in_post($post_id, $post) {
-    if (!isset($_POST['lm_detect_external']) && !isset($_POST['lm_detect_internal']) && !isset($_POST['lm_detect_email'])) {
+    if (!isset($post['lm_detect_external']) && !isset($post['lm_detect_internal']) && !isset($post['lm_detect_email'])) {
         return;
     }
 
@@ -29,9 +29,9 @@ function lm_detect_links_in_post($post_id, $post) {
         $scheme = $parsed['scheme'] ?? '';
 
         // Determine type
-        if (str_starts_with($url, 'mailto:') && empty($_POST['lm_detect_email'])) continue;
-        if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($_POST['lm_detect_external'])) continue;
-        if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($_POST['lm_detect_internal'])) continue;
+        if (str_starts_with($url, 'mailto:') && empty($post['lm_detect_email'])) continue;
+        if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lm_detect_external'])) continue;
+        if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lm_detect_internal'])) continue;
 
         // Check status
         $response = wp_remote_head($url, ['timeout' => 5]);

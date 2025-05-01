@@ -91,11 +91,8 @@ function lm_save_link_meta_box($post_id)
     }
 
     // Handle auto-detect links if requested
-    if (!empty($_POST['lm_detect_external']) || !empty($_POST['lm_detect_internal']) || !empty($_POST['lm_detect_emails']))
-    {
-        error_log( 'detect linjs');
-        lm_detect_links_in_post($post_id, $_POST);
-    }
+    error_log( 'detect links');
+    lm_detect_links_in_post($post_id, $_POST);
 }
 
 add_action('add_meta_boxes', function ()
