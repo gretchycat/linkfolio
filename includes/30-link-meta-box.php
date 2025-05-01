@@ -97,7 +97,7 @@ function lm_save_link_meta_box($post_id)
 
 add_action('add_meta_boxes', function ()
 {
-    add_meta_box('lm-links-meta-box', 'Link Manager', 'lm_render_link_meta_box', ['post', 'page'], 'side', 'default');
+    add_meta_box('lm-links-meta-box', 'Linkfolio', 'lm_render_link_meta_box', ['post', 'page'], 'side', 'default');
 });
 
 add_action('save_post', 'lm_save_link_meta_box');
