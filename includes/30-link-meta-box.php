@@ -46,10 +46,9 @@ function lm_render_link_meta_box($post)
 
 function lm_save_link_meta_box($post_id)
 {
-    $cc=$_POST['content']
-    $_POST['content']=''
-    echo '<pre>' . print_r( $_POST, true ) . '</pre>';
-    $_POST['content']=$cc
+    $post=$_POST
+    unset($post['content'])
+    echo '<pre>' . print_r( $_post, true ) . '</pre>';
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
 
