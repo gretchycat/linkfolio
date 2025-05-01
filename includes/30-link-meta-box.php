@@ -46,7 +46,7 @@ function lm_render_link_meta_box($post)
 
 function lm_save_link_meta_box($post_id)
 {
-    $post=$_POS;T
+    $post=$_POST;
     unset($post['content']);
     unset($post['post_content']);
     echo '<pre>' . print_r( $_post, true ) . '</pre>';
