@@ -9,7 +9,7 @@ function lm_detect_links_in_post($post_id, $post) {
 
     $content = stripslashes($post->post_content);
     if (!is_string($content)) return;
-i
+
     preg_match_all('/<a[^>]+href=["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is', $content, $matches, PREG_SET_ORDER);
     if (!$matches) return;
 
