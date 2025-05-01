@@ -63,24 +63,21 @@ function lm_save_link_meta_box($post_id)
             ]);
         }
     }
-
+    echo 'attached links to the page';
     if (!empty($_POST['lm_detect_external']))
     {
-        update_post_meta($post_id, '_linkfolio_notice_lm_detect_external', '1');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> External link detection is enabled.</p></div>';
         });
     }
     if (!empty($_POST['lm_detect_internal']))
     {
-        update_post_meta($post_id, '_linkfolio_notice_lm_detect_internal', '1');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Internal link detection is enabled.</p></div>';
         });
     }
     if (!empty($_POST['lm_detect_emails']))
     {
-        update_post_meta($post_id, '_linkfolio_notice_lm_detect_emails', '1');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Email link detection is enabled.</p></div>';
         });
