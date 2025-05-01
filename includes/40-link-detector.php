@@ -2,15 +2,12 @@
 // 40-link-detector.php
 defined('ABSPATH') || exit;
 
-function lm_detect_links_in_post($post_id, $post) {
-    if (!isset($post['lm_detect_external']) && !isset($post['lm_detect_internal']) && !isset($post['lm_detect_email'])) {
-        return;
-    }
+function lm_detect_links_in_post($post_id, $post)
+{
+    if (!isset($post['lm_detect_external']) && !isset($post['lm_detect_internal']) && !isset($post['lm_detect_email'])) return;
 
-    error_log('detect links enabled' );
-    $content = $post->post_content;
+    $content = $post['post_content'];
     if (!is_string($content)) return;
-    error_log("content is a string\n".$content);
 
     preg_match_all('/<a\s[^>]*href\s*=\s*["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is',
         stripslashes($content),
@@ -23,9 +20,7 @@ function lm_detect_links_in_post($post_id, $post) {
     global $wpdb;
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    error_log('found ' . count($matches) . 'links.');
     foreach ($matches as $m) {
-        error_log('found ' . $m );
         $url = esc_url_raw(trim($m[1]));
         $label = wp_strip_all_tags($m[2]);
         if (empty($url)) continue;
