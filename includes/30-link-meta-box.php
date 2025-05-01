@@ -64,21 +64,21 @@ function lm_save_link_meta_box($post_id)
         }
     }
 
-    if (!empty($_POST['lm_detect_external']) && !get_post_meta($post_id, '_linkfolio_notice_lm_detect_external', true))
+    if (!empty($_POST['lm_detect_external']))
     {
         update_post_meta($post_id, '_linkfolio_notice_lm_detect_external', '1');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> External link detection is enabled.</p></div>';
         });
     }
-    if (!empty($_POST['lm_detect_internal']) && !get_post_meta($post_id, '_linkfolio_notice_lm_detect_internal', true))
+    if (!empty($_POST['lm_detect_internal']))
     {
         update_post_meta($post_id, '_linkfolio_notice_lm_detect_internal', '1');
         add_action('admin_notices', function () {
             echo '<div class="notice notice-info is-dismissible"><p><strong>Linkfolio:</strong> Internal link detection is enabled.</p></div>';
         });
     }
-    if (!empty($_POST['lm_detect_emails']) && !get_post_meta($post_id, '_linkfolio_notice_lm_detect_emails', true))
+    if (!empty($_POST['lm_detect_emails']))
     {
         update_post_meta($post_id, '_linkfolio_notice_lm_detect_emails', '1');
         add_action('admin_notices', function () {
@@ -86,7 +86,7 @@ function lm_save_link_meta_box($post_id)
         });
     }
 
-// Handle auto-detect links if requested
+    // Handle auto-detect links if requested
     if (!empty($_POST['lm_detect_external']) || !empty($_POST['lm_detect_internal']) || !empty($_POST['lm_detect_emails']))
     {
         lm_detect_links_in_post($post_id, $_POST);
