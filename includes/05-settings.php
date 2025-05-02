@@ -19,7 +19,7 @@ add_action('admin_menu', function () {
         'Edit Links',
         'Edit Links',
         'read',
-        'linkfolio-settings',
+        'linkfolio-edit-links',
         'lm_render_link_settings_page'
     );
 
@@ -48,7 +48,7 @@ function lm_render_linkfolio_page() {
     echo '<li>Lets you assign links per page or post</li>';
     echo '</ul>';
     echo '<p>Use the sidebar menu to manage <strong>Links</strong>, <strong>Categories</strong>, and <strong>Broken Links</strong>.</p>';
-    echo '<p style="margin-top:2em;color:#777;font-size:0.9em;">Plugin by <strong>Gretchen Maculo</strong>. Version 0.1.1</p>';
+    echo '<p style="margin-top:2em;color:#777;font-size:0.9em;">Plugin by <strong>Gretchen Maculo</strong>. Version 0.1.3</p>';
     echo '</div>';
     echo '</div>';
 }
