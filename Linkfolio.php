@@ -7,7 +7,7 @@ Author: Gretchen Maculo
 */
 
 defined('ABSPATH') || exit;
-
+define('plugin_name', 'Linkfolio');
 // Define constants early
 if (!defined('LM_PLUGIN_PATH')) {
     define('LM_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -27,7 +27,7 @@ if ($files) {
 
 // Add a Settings link on the Plugins page
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
-    $settings_link = '<a href="' . admin_url('admin.php?page=linkfolio') . '">Settings</a>';
+    $settings_link = '<a href="' . admin_url('admin.php?page=' . plugin_name) . '">Settings</a>';
     array_unshift($links, $settings_link);
     return $links;
 });
