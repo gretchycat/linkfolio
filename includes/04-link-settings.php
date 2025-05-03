@@ -56,7 +56,7 @@ function lm_render_link_settings_page() {
     }
 
     // Render broken links section
-    echo '<div id="tab-broken" class="lm-tab-content" style="display:none; background: rgba(0,0,0,0.10); padding: 1em;">';
+    echo '<div id="tab-broken" class="lm-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lm_render_broken_links();
     echo '</div>';
