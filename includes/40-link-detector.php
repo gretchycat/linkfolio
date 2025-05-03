@@ -63,6 +63,7 @@ function lm_detect_links_in_post($post_id, $post)
                 'icon_url' => $icon,
                 'description' => '',
                 'category_slug' => 'references',
+                'status_code' => $code,
             ]);
             $link_id = $wpdb->insert_id;
         }

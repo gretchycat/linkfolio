@@ -3,20 +3,25 @@
 
 defined('ABSPATH') || exit;
 
-function lm_render_all_links() {
+function lm_render_all_links() 
+{
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     $links = $wpdb->get_results("SELECT * FROM $table ORDER BY id ASC");
-
-    foreach ($links as $link) {
+    foreach ($links as $link) 
+    {
         $id = $link->id;
-        if (isset($_POST["edit_link_$id"])) {
+        if (isset($_POST["edit_link_$id"])) 
+        {
             lm_render_link_row_editor($link);
-        } elseif (isset($_POST["saved_link_$id"])) {
+        } elseif (isset($_POST["saved_link_$id"])) 
+        {
             lm_render_link_row_view($link);
-        } elseif (isset($_POST["cancel_link_triggered_$id"])) {
+        } elseif (isset($_POST["cancel_link_triggered_$id"])) 
+        {
             lm_render_link_row_view($link);
-        } else {
+        } else 
+        {
             lm_render_link_row_view($link);
         }
     }
@@ -28,7 +33,8 @@ function lm_render_all_links() {
     echo '<p><button class="button" name="add_new_link" value="1">+ Add Link</button></p>';
 }
 
-function lm_render_links_by_category($slug) {
+function lm_render_links_by_category($slug) 
+{
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     $links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $slug));
@@ -50,7 +56,7 @@ function lm_render_links_by_category($slug) {
 function lm_render_broken_links() {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
-    $links = $wpdb->get_results("SELECT * FROM $table WHERE label = '404' ORDER BY id ASC");
+    $links = $wpdb->get_results("SELECT * FROM $table WHERE status_code >= 400 AND status_code < 500 ORDER BY id ASC");
 
     foreach ($links as $link) {
         $id = $link->id;
