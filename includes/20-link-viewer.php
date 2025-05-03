@@ -11,6 +11,7 @@ function lm_render_link_row_view($link, $include_edit = true) {
     $icon_url = esc_url($link['icon_url'] ?? '');
     $category = esc_html($link['category_slug'] ?? '');
     $id = (int)($link['id'] ?? 0);
+    $code=(int)($link['status_code'] ?? 0);
 
     echo '<div class="lm-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
 
@@ -30,7 +31,7 @@ function lm_render_link_row_view($link, $include_edit = true) {
     } else {
         echo '<strong>' . $label . '</strong>';
     }
-    if ($url) echo ' <code>' . $url . '</code><br>';
+    if ($url) echo ' <code>' . $url . '</code>(' . $code . ')<br>';
     if ($description) echo '<div style="margin-top:0.25em">' . $description . '</div>';
     if ($category) echo '<div style="margin-top:0.25em;font-size:12px;color:#aaa">Category: <strong>' . $category . '</strong></div>';
 
