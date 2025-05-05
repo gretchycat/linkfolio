@@ -33,7 +33,7 @@ function lm_render_all_links()
     echo '<p><button class="button" name="add_new_link" value="1">+ Add Link</button></p>';
 }
 
-function lm_render_links_by_category($slug) 
+function lm_render_links_by_category($slug, $show_broken) 
 {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
@@ -44,11 +44,11 @@ function lm_render_links_by_category($slug)
         if (isset($_POST["edit_link_$id"])) {
             lm_render_link_row_editor($link);
         } elseif (isset($_POST["saved_link_$id"])) {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link, true, $show_broken);
         } elseif (isset($_POST["cancel_link_triggered_$id"])) {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link, true, $show_broken);
         } else {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link, true, $show_broken);
         }
     }
 }
@@ -63,11 +63,11 @@ function lm_render_broken_links() {
         if (isset($_POST["edit_link_$id"])) {
             lm_render_link_row_editor($link);
         } elseif (isset($_POST["saved_link_$id"])) {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link), true, true;
         } elseif (isset($_POST["cancel_link_triggered_$id"])) {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link, true, true);
         } else {
-            lm_render_link_row_view($link);
+            lm_render_link_row_view($link, true, true);
         }
     }
 }

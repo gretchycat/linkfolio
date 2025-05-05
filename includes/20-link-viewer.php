@@ -2,10 +2,9 @@
 
 defined('ABSPATH') || exit;
 
-function lm_render_link_row_view($link, $include_edit = true, $show_broken=true)
+function lm_render_link_row_view($link, $include_edit = true, $show_broken = true)
 {
     $link = (array) $link;
-
     $label = esc_html($link['label'] ?? '');
     $url = esc_url($link['url'] ?? '');
     $description = esc_html($link['description'] ?? '');
@@ -13,7 +12,7 @@ function lm_render_link_row_view($link, $include_edit = true, $show_broken=true)
     $category = esc_html($link['category_slug'] ?? '');
     $id = (int)($link['id'] ?? 0);
     $code=(int)($link['status_code'] ?? 404);
-    if($show_broken || $code<400 || $code >=500)
+    if($show_broken || $code<400 || $code>=500)
     {
         echo '<div class="lm-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
         // Icon block
