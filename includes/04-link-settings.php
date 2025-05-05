@@ -50,7 +50,7 @@ function lm_render_link_settings_page() {
     foreach ($categories as $cat) {
         echo '<div id="tab-' . esc_attr($cat->slug) . '" class="lm-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em; margin-bottom: 2em;">';
         echo '<h2>' . esc_html($cat->name) . '</h2>';
-        lm_render_links_by_category($cat->slug, false);
+        lm_render_links_by_category($cat->slug, $show_broken=false)
         echo '</div>';
     }
 

@@ -13,7 +13,7 @@ function lm_render_link_row_view($link, $include_edit = true, $show_broken=true)
     $category = esc_html($link['category_slug'] ?? '');
     $id = (int)($link['id'] ?? 0);
     $code=(int)($link['status_code'] ?? 404);
-    if($show_broken || $code<400 || $code >=600)
+    if($show_broken || $code<400 || $code >=500)
     {
         echo '<div class="lm-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
         // Icon block
@@ -29,7 +29,7 @@ function lm_render_link_row_view($link, $include_edit = true, $show_broken=true)
 
         // Text block
         echo '<div class="lm-link-info">';
-        if ($label && $url) i
+        if ($label && $url)
         {
             echo '<strong><a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $label . '</a></strong>';
         } else
