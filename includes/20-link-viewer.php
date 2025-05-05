@@ -2,7 +2,7 @@
 
 defined('ABSPATH') || exit;
 
-function lm_render_link_row_view($link, $include_edit = true, $show_broken = true)
+function lf_render_link_row_view($link, $include_edit = true, $show_broken = true)
 {
     $link = (array) $link;
     $label = esc_html($link['label'] ?? '');

@@ -3,7 +3,7 @@
 
 defined('ABSPATH') || exit;
 
-function lm_initialize_database() {
+function lf_initialize_database() {
     global $wpdb;
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -83,13 +83,13 @@ SQL;
     }
 }
 
-function lm_get_all_categories() {
+function lf_get_all_categories() {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_link_categories';
     return $wpdb->get_results("SELECT * FROM $table ORDER BY name ASC");
 }
 
-function lm_save_category($data, $id = null) {
+function lf_save_category($data, $id = null) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_link_categories';
     $payload = [
@@ -109,13 +109,13 @@ function lm_save_category($data, $id = null) {
     }
 }
 
-function lm_delete_category($id) {
+function lf_delete_category($id) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_link_categories';
     return $wpdb->delete($table, ['id' => (int)$id]);
 }
 
-function lm_save_link($data, $id = null) {
+function lf_save_link($data, $id = null) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     // Ensure the 'status_code' column exists
@@ -132,7 +132,7 @@ function lm_save_link($data, $id = null) {
 
     if ((empty($manual_icon) || empty($data['label']) || $data['status_code']>=400) && !empty($url))
     {
-        $fetched = lm_fetch_page_metadata($url);
+        $fetched = lf_fetch_page_metadata($url);
         if (empty($manual_icon) && !empty($fetched['icon_url'])) {
             $manual_icon = $fetched['icon_url'];
         }
@@ -160,7 +160,7 @@ function lm_save_link($data, $id = null) {
     }
 }
 
-function lm_delete_link($id) {
+function lf_delete_link($id) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     return $wpdb->delete($table, ['id' => (int)$id]);

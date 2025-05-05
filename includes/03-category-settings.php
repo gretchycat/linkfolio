@@ -11,7 +11,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
 });
 
 // Render the c=ategory settings subpage
-function lm_render_category_settings_page() {
+function lf_render_category_settings_page() {
     echo '<div class="wrap lm-category-settings-wrap">';
     echo '<h1 class="lm-category-settings-title">Edit Link Categories</h1>';
     do_action('admin_notices');
@@ -19,7 +19,7 @@ function lm_render_category_settings_page() {
     foreach ($_POST as $key => $val) {
         if (preg_match('/^save_(\d+)$/', $key, $m) || $key === 'save_new') {
             $id = $m[1] ?? 'new';
-            lm_save_category([
+            lf_save_category([
                 'name' => $_POST["name_$id"] ?? '',
                 'layout' => $_POST["layout_$id"] ?? 'vertical',
                 'separator' => $_POST["separator_$id"] ?? '•',
@@ -34,11 +34,11 @@ function lm_render_category_settings_page() {
             $_POST["cancel_triggered_$id"] = true;
         }
         if (preg_match('/^delete_(\d+)$/', $key, $m)) {
-            lm_delete_category($m[1]);
+            lf_delete_category($m[1]);
         }
     }
 
     echo '<div class="lm-category-settings-body">';
-    lm_render_all_categories();
+    lf_render_all_categories();
     echo '</div></div>';
 }

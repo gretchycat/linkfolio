@@ -9,7 +9,7 @@ add_action('admin_menu', function () {
         'Linkfolio',
         'read',
         'linkfolio',
-        'lm_render_linkfolio_page',
+        'lf_render_linkfolio_page',
         'dashicons-admin-links',
         80
     );
@@ -20,7 +20,7 @@ add_action('admin_menu', function () {
         'Edit Links',
         'read',
         'linkfolio-edit-links',
-        'lm_render_link_settings_page'
+        'lf_render_link_settings_page'
     );
 
     add_submenu_page(
@@ -29,12 +29,12 @@ add_action('admin_menu', function () {
         'Edit Categories',
         'read',
         'linkfolio-edit-categories',
-        'lm_render_category_settings_page'
+        'lf_render_category_settings_page'
     );
 }, 11);
 
 // Default Linkfolio "About" page
-function lm_render_linkfolio_page() {
+function lf_render_linkfolio_page() {
     echo '<div class="wrap">';
     echo '<h1>Linkfolio</h1>';
     echo '<div class="lm-about-tab" style="background: rgba(0,0,0,0.05); padding: 1em; border-radius: 6px;">';

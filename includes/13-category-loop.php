@@ -2,7 +2,7 @@
 
 defined('ABSPATH') || exit;
 
-function lm_render_all_categories() {
+function lf_render_all_categories() {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_link_categories';
 
@@ -28,14 +28,14 @@ function lm_render_all_categories() {
                    !isset($_POST["saved_$id"]);
 
         if ($editing) {
-            lm_render_category_row_editor($row);
+            lf_render_category_row_editor($row);
         } else {
-            lm_render_category_row_view($row);
+            lf_render_category_row_view($row);
         }
     }
 
     if (isset($_POST['add_new_category'])) {
-        lm_render_category_row_editor((object) [
+        lf_render_category_row_editor((object) [
             'id' => 'new',
             'name' => '',
             'layout' => 'vertical',

@@ -3,7 +3,7 @@
 
 defined('ABSPATH') || exit;
 
-function lm_render_link_meta_box($post)
+function lf_render_link_meta_box($post)
 {
     global $wpdb;
     $post_id = $post->ID;
@@ -22,16 +22,16 @@ function lm_render_link_meta_box($post)
         }
         $checked = in_array($link->id, $selected_links) ? 'checked' : '';
         echo '<div style="margin-bottom:1em;display:flex;align-items:center;gap:0.5em">';
-        echo '<input type="checkbox" name="lm_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
-        lm_render_link_row_view($link, false);
+        echo '<input type="checkbox" name="lf_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
+        lf_render_link_row_view($link, false);
         echo '</div>';
     }
     echo '</div>';
 
     echo '<p style="margin-top:1em;">';
-    echo '<label><input type="checkbox" name="lm_detect_external" value="1" checked> Auto-detect external links</label><br>';
-    echo '<label><input type="checkbox" name="lm_detect_internal" value="1"> Auto-detect internal links</label><br>';
-    echo '<label><input type="checkbox" name="lm_detect_emails" value="1"> Auto-detect email links</label>';
+    echo '<label><input type="checkbox" name="lf_detect_external" value="1" checked> Auto-detect external links</label><br>';
+    echo '<label><input type="checkbox" name="lf_detect_internal" value="1"> Auto-detect internal links</label><br>';
+    echo '<label><input type="checkbox" name="lf_detect_emails" value="1"> Auto-detect email links</label>';
     echo '</p>';
 
     if ($skipped_broken_links > 0)
@@ -44,7 +44,7 @@ function lm_render_link_meta_box($post)
     }
 }
 
-function lm_save_link_meta_box($post_id)
+function lf_save_link_meta_box($post_id)
 {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
@@ -53,19 +53,19 @@ function lm_save_link_meta_box($post_id)
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
     $wpdb->delete($assoc_table, ['post_id' => $post_id]);
 
-    if (!empty($_POST['lm_links']) && is_array($_POST['lm_links']))
-        foreach ($_POST['lm_links'] as $link_id)
+    if (!empty($_POST['lf_links']) && is_array($_POST['lf_links']))
+        foreach ($_POST['lf_links'] as $link_id)
             $wpdb->insert($assoc_table, [
                 'post_id' => $post_id,
                 'link_id' => intval($link_id),
             ]);
     // Handle auto-detect links if requested
-    lm_detect_links_in_post($post_id, $_POST);
+    lf_detect_links_in_post($post_id, $_POST);
 }
 
 add_action('add_meta_boxes', function ()
 {
-    add_meta_box('lm-links-meta-box', 'Linkfolio', 'lm_render_link_meta_box', ['post', 'page'], 'side', 'default');
+    add_meta_box('lm-links-meta-box', 'Linkfolio', 'lf_render_link_meta_box', ['post', 'page'], 'side', 'default');
 });
 
-add_action('save_post', 'lm_save_link_meta_box');
+add_action('save_post', 'lf_save_link_meta_box');

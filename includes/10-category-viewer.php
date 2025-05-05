@@ -2,7 +2,7 @@
 // 10-category-viewer.php
 defined('ABSPATH') || exit;
 
-function lm_render_category_row_view($cat) {
+function lf_render_category_row_view($cat) {
     $id = $cat->id;
     $can_delete = !$cat->is_default;
 

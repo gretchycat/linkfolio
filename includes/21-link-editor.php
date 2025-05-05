@@ -9,7 +9,7 @@ if (!defined('LM_PLUGIN_URL')) {
     define('LM_PLUGIN_URL', plugin_dir_url(__FILE__));
 }
 
-function lm_render_link_row_editor($link) {
+function lf_render_link_row_editor($link) {
     global $wpdb;
     $id = $link->id;
     $is_new = ($id === 'new');

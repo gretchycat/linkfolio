@@ -3,7 +3,7 @@
 
 defined('ABSPATH') || exit;
 
-function lm_fetch_page_metadata($url) {
+function lf_fetch_page_metadata($url) {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/media.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';

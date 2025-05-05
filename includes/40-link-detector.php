@@ -2,9 +2,9 @@
 // 40-link-detector.php
 defined('ABSPATH') || exit;
 
-function lm_detect_links_in_post($post_id, $post)
+function lf_detect_links_in_post($post_id, $post)
 {
-    if (!isset($post['lm_detect_external']) && !isset($post['lm_detect_internal']) && !isset($post['lm_detect_email'])) return;
+    if (!isset($post['lf_detect_external']) && !isset($post['lf_detect_internal']) && !isset($post['lf_detect_email'])) return;
 
     $content = $post['post_content'];
     if (!is_string($content)) return;
@@ -30,9 +30,9 @@ function lm_detect_links_in_post($post_id, $post)
         $scheme = $parsed['scheme'] ?? '';
 
         // Determine type
-        if (str_starts_with($url, 'mailto:') && empty($post['lm_detect_email'])) continue;
-        if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lm_detect_external'])) continue;
-        if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lm_detect_internal'])) continue;
+        if (str_starts_with($url, 'mailto:') && empty($post['lf_detect_email'])) continue;
+        if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lf_detect_external'])) continue;
+        if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lf_detect_internal'])) continue;
 
         // Check status
         $response = wp_remote_head($url, ['timeout' => 5]);
@@ -54,7 +54,7 @@ function lm_detect_links_in_post($post_id, $post)
         $link_id = $existing->id ?? null;
 
         if (!$link_id) {
-            $details = lm_fetch_page_metadata($url);
+            $details = lf_fetch_page_metadata($url);
             $label = !empty($details['title']) ? $details['title'] : ($label ?: $url);
             $icon = $details['icon_url'] ?? '';
             $wpdb->insert($links_table, [

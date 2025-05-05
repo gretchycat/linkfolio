@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 // Automatically append links to posts/pages with assigned links
 add_filter('the_content', function ($content) {
     if (is_singular() && in_the_loop() && is_main_query()) {
-        $rendered = lm_render_links_for_post(get_the_ID());
+        $rendered = lf_render_links_for_post(get_the_ID());
         if (!empty($rendered)) {
             return $content . $rendered;
         }
@@ -12,7 +12,7 @@ add_filter('the_content', function ($content) {
     return $content;
 });
 
-function lm_render_links_for_post($post_id) {
+function lf_render_links_for_post($post_id) {
     global $wpdb;
     $cat_table = $wpdb->prefix . 'custom_link_categories';
     $link_table = $wpdb->prefix . 'custom_links';

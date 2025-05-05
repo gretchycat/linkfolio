@@ -1,7 +1,7 @@
 <?php
 // category-editor.php
 defined('ABSPATH') || exit;
-function lm_render_category_row_editor($cat) {
+function lf_render_category_row_editor($cat) {
     $id = $cat->id;
     $is_new = ($id === 'new');
     $save_name = $is_new ? 'save_new' : "save_$id";
