@@ -119,8 +119,8 @@ function lm_save_link($data, $id = null) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     // Ensure the 'status_code' column exists
-$has_column = $wpdb->get_var("SHOW COLUMNS FROM $table LIKE 'status_code'");
-if (!$has_column) {
+    $has_column = $wpdb->get_var("SHOW COLUMNS FROM $table LIKE 'status_code'");
+    if (!$has_column) {
     $wpdb->query("ALTER TABLE $table ADD COLUMN status_code SMALLINT DEFAULT NULL");
 }
     global $wpdb;
@@ -128,9 +128,10 @@ if (!$has_column) {
 
     $manual_icon = $data['icon_url'] ?? '';
     $url = $data['url'] ?? '';
-    $status_code = $data['status_code'] ?? null;
+    $status_code = $data['status_code'] ?? 404;
 
-    if ((empty($manual_icon) || empty($data['label'])) && !empty($url)) {
+    if ((empty($manual_icon) || empty($data['label']) || $data['status_code']>=400) && !empty($url))
+    {
         $fetched = lm_fetch_page_metadata($url);
         if (empty($manual_icon) && !empty($fetched['icon_url'])) {
             $manual_icon = $fetched['icon_url'];
