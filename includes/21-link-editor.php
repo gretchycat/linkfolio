@@ -31,6 +31,7 @@ function lm_render_link_row_editor($link) {
     echo '<img id="' . $icon_id . '_preview" src="' . ($icon_url ?: $placeholder) . '" alt="icon preview">';
     echo '</div>';
     echo '<input type="hidden" name="' . $icon_id . '" id="' . $icon_id . '" value="' . $icon_url . '">';
+    echo '<input type="hidden" name="' . "status_code_$id" . '"" value="' . $link->status_code . '">';
     echo '<label class="lm-label">Label:&nbsp;<input type="text" name="label_' . $id . '" value="' . esc_attr($link->label) . '" maxlength="100" size="10" class="lm-input-short"></label>';
     echo '&nbsp;<label class="lm-label">Category:&nbsp;<select name="category_' . $id . '" class="lm-select">';
     foreach ($categories as $cat) {

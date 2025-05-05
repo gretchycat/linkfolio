@@ -20,6 +20,7 @@ function lm_render_link_settings_page() {
                 'icon_url' => $_POST["icon_$id"] ?? '',
                 'description' => $_POST["desc_$id"] ?? '',
                 'category' => $_POST["category_$id"] ?? '',
+                'status_code' => $_POST["status_code_$id"] ?? '404',
             ], $id === 'new' ? null : $id);
             $_POST["saved_link_$id"] = true;
         }
@@ -31,11 +32,9 @@ function lm_render_link_settings_page() {
             lm_delete_link($m[1]);
         }
     }
-
     echo '<div class="wrap">';
     echo '<h1>Linkfolio</h1>';
     do_action('admin_notices');
-
     // Render tab buttons
     $categories = lm_get_all_categories();
     echo '<div class="lm-tab-bar" style="margin-bottom:1em">';
