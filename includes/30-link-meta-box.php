@@ -16,14 +16,15 @@ function lf_render_link_meta_box($post)
     $skipped_broken_links = 0;
     foreach ($all_links as $link)
     {
-        if (trim(strtolower(floor($link->statuss_code/100)!=4)) === 4
+        if (floor($link->statuss_code/100)==4)
+        {
             $skipped_broken_links++;
             continue;
         }
         $checked = in_array($link->id, $selected_links) ? 'checked' : '';
         echo '<div style="margin-bottom:1em;display:flex;align-items:center;gap:0.5em">';
         echo '<input type="checkbox" name="lf_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
-        lf_render_link_row_view($link, false);
+        lf_render_link_row_view($link, false, false);
         echo '</div>';
     }
     echo '</div>';
