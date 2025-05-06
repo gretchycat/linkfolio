@@ -10,11 +10,12 @@ add_action('admin_enqueue_scripts', function ($hook) {
 });
 
 // Main Linkfolio settings page
-function lf_render_link_settings_page() 
+function lf_render_link_settings_page()
 {
-    foreach ($_POST as $key => $val) 
+    foreach ($_POST as $key => $val)
     {
-        if (preg_match('/^save_link_(\d+)$/', $key, $m) || $key === 'save_link_new') 
+        $gotoanchor='';
+        if (preg_match('/^save_link_(\d+)$/', $key, $m) || $key === 'save_link_new')
         {
             $id = $m[1] ?? 'new';
             lf_save_link([
@@ -27,12 +28,12 @@ function lf_render_link_settings_page()
             ], $id === 'new' ? null : $id);
             $_POST["saved_link_$id"] = true;
         }
-        if (preg_match('/^cancel_link_(\d+)$/', $key, $m) || $key === 'cancel_link_new') 
+        if (preg_match('/^cancel_link_(\d+)$/', $key, $m) || $key === 'cancel_link_new')
         {
             $id = $m[1] ?? 'new';
             $_POST["cancel_link_triggered_$id"] = true;
         }
-        if (preg_match('/^delete_link_(\d+)$/', $key, $m)) 
+        if (preg_match('/^delete_link_(\d+)$/', $key, $m))
         {
             lf_delete_link($m[1]);
         }
@@ -43,7 +44,7 @@ function lf_render_link_settings_page()
     // Render tab buttons
     $categories = lf_get_all_categories();
     echo '<div class="lf-tab-bar" style="margin-bottom:1em">';
-    foreach ($categories as $cat) 
+    foreach ($categories as $cat)
     {
         echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
     }
@@ -54,7 +55,7 @@ function lf_render_link_settings_page()
     // all the buttons and link/category rows here
 
     // Render category-based link sections
-    foreach ($categories as $cat) 
+    foreach ($categories as $cat)
     {
         echo '<div id="tab-' . esc_attr($cat->slug) . '" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em; margin-bottom: 2em;">';
         echo '<h2>' . esc_html($cat->name) . '</h2>';
@@ -70,8 +71,8 @@ function lf_render_link_settings_page()
 
     // Render new link section
     echo '<div id="tab-new" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
-    echo '<h2 style="color:#33d">Nwn Link</h2>';
- 
+    echo '<h2 style="color:#33d">New Link</h2>';
+
     $newlink = (object)[
         'id'          => 'new',
         'label'       => '',

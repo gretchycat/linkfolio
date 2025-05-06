@@ -23,7 +23,7 @@ function lf_render_link_row_editor($link) {
     $icon_url = esc_attr($link->icon_url);
     $placeholder = LM_PLUGIN_URL . 'assets/placeholder.png';
 
-    echo '<div id="link_' . $id . '" class="lf-link-editor">';
+    echo '<div id="edit_link_' . $id . '" class="lf-link-editor">';
     
     // Row 1: Icon, label, category
     echo '<div class="lf-link-top">';
