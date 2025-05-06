@@ -24,7 +24,7 @@ function lf_render_link_meta_box($post)
         $checked = in_array($link->id, $selected_links) ? 'checked' : '';
         echo '<div style="margin-bottom:1em;display:flex;align-items:center;gap:0.5em">';
         echo '<input type="checkbox" name="lf_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
-        lf_render_link_row_view($link, false, false);
+        lf_render_link_mini_row_view($link, false, false);
         echo '</div>';
     }
     echo '</div>';
