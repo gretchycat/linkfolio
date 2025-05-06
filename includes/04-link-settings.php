@@ -46,10 +46,11 @@ function lf_render_link_settings_page()
     echo '<div class="lf-tab-bar" style="margin-bottom:1em">';
     foreach ($categories as $cat)
     {
-        echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
+        $tab='data-scroll-to="tab-' . esc_attr($cat->slug).'"'; 
+        echo '<a href="#" '.$tab.'" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
     }
-    echo '<a href="#tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a> ';
-    echo '<a href="#tab-new" class="lf-tab-button" data-tab="tab-new" style="color:#33d">New Link</a>';
+    echo '<a href="#" data-scroll-to="tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a> ';
+    echo '<a href="#" data-scroll-to="tab-new" class="lf-tab-button" data-tab="tab-new" style="color:#33d">New Link</a>';
     echo '</div>';
     echo '<form method="post" class="lf-linkfolio-form">';
     // all the buttons and link/category rows here
