@@ -12,6 +12,12 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
     $category = esc_html($link['category_slug'] ?? '');
     $id = (int)($link['id'] ?? 0);
     $code=(int)($link['status_code'] ?? 404);
+    $codestr='<span style="background-color: green;">'.$code.'</span>'; 
+    if (floor($code/100)==3 || floor($code/100)==5)
+        $codestr='<span style="background-color: yellow;">'.$code.'</span>'; 
+    if (floor($code/100)==4)
+        $codestr='<span style="background-color: red;">'.$code.'</span>'; 
+
     if($show_broken || $code<400 || $code>=500)
     {
         echo '<div class="lm-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
@@ -35,7 +41,7 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
         {
             echo '<strong>' . $label . '</strong>';
         }
-        if ($url) echo ' <code>' . $url . '</code>(' . $code . ')<br>';
+        if ($url) echo ' <code>' . $url . '</code>(' . $codestr . ')<br>';
         if ($description) echo '<div style="margin-top:0.25em">' . $description . '</div>';
         if ($category) echo '<div style="margin-top:0.25em;font-size:12px;color:#aaa">Category: <strong>' . $category . '</strong></div>';
 
