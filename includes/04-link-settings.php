@@ -37,25 +37,25 @@ function lf_render_link_settings_page() {
     do_action('admin_notices');
     // Render tab buttons
     $categories = lf_get_all_categories();
-    echo '<div class="lm-tab-bar" style="margin-bottom:1em">';
+    echo '<div class="lf-tab-bar" style="margin-bottom:1em">';
     foreach ($categories as $cat) {
-        echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lm-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
+        echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
     }
-    echo '<a href="#tab-broken" class="lm-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a>';
+    echo '<a href="#tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a>';
     echo '</div>';
-    echo '<form method="post" class="lm-linkfolio-form">';
+    echo '<form method="post" class="lf-linkfolio-form">';
     // all the buttons and link/category rows here
 
     // Render category-based link sections
     foreach ($categories as $cat) {
-        echo '<div id="tab-' . esc_attr($cat->slug) . '" class="lm-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em; margin-bottom: 2em;">';
+        echo '<div id="tab-' . esc_attr($cat->slug) . '" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em; margin-bottom: 2em;">';
         echo '<h2>' . esc_html($cat->name) . '</h2>';
         lf_render_links_by_category($cat->slug, false);
         echo '</div>';
     }
 
     // Render broken links section
-    echo '<div id="tab-broken" class="lm-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
+    echo '<div id="tab-broken" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lf_render_broken_links();
     echo '</div>';

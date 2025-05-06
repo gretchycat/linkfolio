@@ -12,8 +12,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
 
 // Render the c=ategory settings subpage
 function lf_render_category_settings_page() {
-    echo '<div class="wrap lm-category-settings-wrap">';
-    echo '<h1 class="lm-category-settings-title">Edit Link Categories</h1>';
+    echo '<div class="wrap lf-category-settings-wrap">';
+    echo '<h1 class="lf-category-settings-title">Edit Link Categories</h1>';
     do_action('admin_notices');
 
     foreach ($_POST as $key => $val) {
@@ -38,7 +38,7 @@ function lf_render_category_settings_page() {
         }
     }
 
-    echo '<div class="lm-category-settings-body">';
+    echo '<div class="lf-category-settings-body">';
     lf_render_all_categories();
     echo '</div></div>';
 }

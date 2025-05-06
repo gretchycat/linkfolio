@@ -57,13 +57,13 @@ function lf_render_links_for_post($post_id) {
 
     // Render HTML
     ob_start();
-    echo '<div class="lm-links-wrapper">';
+    echo '<div class="lf-links-wrapper">';
 
     foreach ($grouped as $slug => $links_in_cat) {
         $cat = $cat_index[$slug] ?? null;
         if (!$cat || $cat->slug === 'uncategorized') continue;
 
-        echo '<div class="lm-links-section" style="margin-top:1em;">';
+        echo '<div class="lf-links-section" style="margin-top:1em;">';
         echo '<h3>' . esc_html($cat->name) . '</h3>';
 
         if ($cat->layout === 'horizontal') {

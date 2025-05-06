@@ -37,7 +37,7 @@ add_action('admin_menu', function () {
 function lf_render_linkfolio_page() {
     echo '<div class="wrap">';
     echo '<h1>Linkfolio</h1>';
-    echo '<div class="lm-about-tab" style="background: rgba(0,0,0,0.05); padding: 1em; border-radius: 6px;">';
+    echo '<div class="lf-about-tab" style="background: rgba(0,0,0,0.05); padding: 1em; border-radius: 6px;">';
     echo '<h2>About Linkfolio</h2>';
     echo '<p><strong>Linkfolio</strong> is a lightweight, privacy-conscious WordPress plugin for managing curated links and displaying them cleanly on your posts or pages.</p>';
     echo '<ul style="list-style: disc; padding-left: 1.5em;">';

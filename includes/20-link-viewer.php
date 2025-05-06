@@ -20,9 +20,9 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
 
     if($show_broken || $code<400 || $code>=500)
     {
-        echo '<div class="lm-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
+        echo '<div id="link_'.$id.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
         // Icon block
-        echo '<div class="lm-link-icon" style="flex-shrink:0;width:96px;height:96px;overflow:hidden;border-radius:8px;background:#222;text-align:center;line-height:96px">';
+        echo '<div class="lf-link-icon" style="flex-shrink:0;width:96px;height:96px;overflow:hidden;border-radius:8px;background:#222;text-align:center;line-height:96px">';
         if ($icon_url)
         {
             echo '<img src="' . $icon_url . '" style="max-width:96px;max-height:96px;object-fit:cover;vertical-align:middle" alt="icon">';
@@ -33,7 +33,7 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
         echo '</div>';
 
         // Text block
-        echo '<div class="lm-link-info">';
+        echo '<div class="lf-link-info">';
         if ($label && $url)
         {
             echo '<strong><a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $label . '</a></strong>';

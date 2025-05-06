@@ -23,17 +23,17 @@ function lf_render_link_row_editor($link) {
     $icon_url = esc_attr($link->icon_url);
     $placeholder = LM_PLUGIN_URL . 'assets/placeholder.png';
 
-    echo '<div id="link_edit_' . $id . '" class="lm-link-editor">';
+    echo '<div id="link_' . $id . '" class="lf-link-editor">';
     
     // Row 1: Icon, label, category
-    echo '<div class="lm-link-top">';
-    echo '<div class="lm-icon-wrapper" onclick="openMediaSelector(\'' . $icon_id . '\')">';
+    echo '<div class="lf-link-top">';
+    echo '<div class="lf-icon-wrapper" onclick="openMediaSelector(\'' . $icon_id . '\')">';
     echo '<img id="' . $icon_id . '_preview" src="' . ($icon_url ?: $placeholder) . '" alt="icon preview">';
     echo '</div>';
     echo '<input type="hidden" name="' . $icon_id . '" id="' . $icon_id . '" value="' . $icon_url . '">';
     echo '<input type="hidden" name="' . "status_code_$id" . '"" value="' . $link->status_code . '">';
-    echo '<label class="lm-label">Label:&nbsp;<input type="text" name="label_' . $id . '" value="' . esc_attr($link->label) . '" maxlength="100" size="10" class="lm-input-short"></label>';
-    echo '&nbsp;<label class="lm-label">Category:&nbsp;<select name="category_' . $id . '" class="lm-select">';
+    echo '<label class="lf-label">Label:&nbsp;<input type="text" name="label_' . $id . '" value="' . esc_attr($link->label) . '" maxlength="100" size="10" class="lf-input-short"></label>';
+    echo '&nbsp;<label class="lf-label">Category:&nbsp;<select name="category_' . $id . '" class="lf-select">';
     foreach ($categories as $cat) {
         $selected = ($cat->slug === $link->category_slug) ? 'selected' : '';
         echo '<option value="' . esc_attr($cat->slug) . '" ' . $selected . '>' . esc_html($cat->name) . '</option>';
@@ -42,18 +42,18 @@ function lf_render_link_row_editor($link) {
     echo '</div>';
 
     // Row 2: URL
-    echo '<div class="lm-link-middle">';
-    echo '<label class="lm-label">URL:&nbsp;<input type="url" name="url_' . $id . '" size="30" value="' . esc_attr($link->url) . '" class="lm-input-long"></label>';
+    echo '<div class="lf-link-middle">';
+    echo '<label class="lf-label">URL:&nbsp;<input type="url" name="url_' . $id . '" size="30" value="' . esc_attr($link->url) . '" class="lf-input-long"></label>';
     echo '</div>';
 
     // Row 3: Description
-    echo '<div class="lm-link-desc">';
-    echo '<label class="lm-label">Description:</label><br>';
-    echo '<textarea name="desc_' . $id . '" rows="2" cols="40" class="lm-textarea">' . esc_textarea($link->description) . '</textarea>';
+    echo '<div class="lf-link-desc">';
+    echo '<label class="lf-label">Description:</label><br>';
+    echo '<textarea name="desc_' . $id . '" rows="2" cols="40" class="lf-textarea">' . esc_textarea($link->description) . '</textarea>';
     echo '</div>';
 
     // Row 4: Controls
-    echo '<div class="lm-link-controls">';
+    echo '<div class="lf-link-controls">';
     echo '<button type="submit" name="' . $save_name . '" class="button button-primary">Save</button> ';
     echo '<button type="submit" name="' . $cancel_name . '" class="button">Cancel</button>';
     echo '</div>';
