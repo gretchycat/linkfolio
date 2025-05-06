@@ -45,7 +45,7 @@ function lf_render_links_by_category($slug, $show_broken)
         if (isset($_POST["edit_link_$id"]))
         {#anchor here
             lf_render_link_row_editor($link);
-            lf_scroll_to_element_script("edit_link_$id")
+            lf_scroll_to_element_script("edit_link_$id"i:)
         }
         elseif (isset($_POST["saved_link_$id"]))
         {
