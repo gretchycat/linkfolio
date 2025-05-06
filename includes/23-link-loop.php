@@ -39,18 +39,36 @@ function lf_render_links_by_category($slug, $show_broken)
     $table = $wpdb->prefix . 'custom_links';
     $links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $slug));
 
-    foreach ($links as $link) {
+    foreach ($links as $link) 
+    {
         $id = $link->id;
-        if (isset($_POST["edit_link_$id"])) {
+        if (isset($_POST["edit_link_$id"])) 
+        {
             lf_render_link_row_editor($link);
-        } elseif (isset($_POST["saved_link_$id"])) {
+        } 
+        elseif (isset($_POST["saved_link_$id"])) 
+        {
             lf_render_link_row_view($link, true, $show_broken);
-        } elseif (isset($_POST["cancel_link_triggered_$id"])) {
+        } 
+        elseif (isset($_POST["cancel_link_triggered_$id"])) 
+        {
             lf_render_link_row_view($link, true, $show_broken);
-        } else {
+        } 
+        else 
+        {
             lf_render_link_row_view($link, true, $show_broken);
         }
     }
+    $link = [
+        'id'          => 'new',
+        'label'       => '',
+        'url'         => '',
+        'icon_url'    => '',
+        'description' => '',
+        'category'    => $slug ?? '',
+        'status_code' => 404,
+    ];
+    lf_render_link_row_editor($link);
 }
 
 function lf_render_broken_links() {
