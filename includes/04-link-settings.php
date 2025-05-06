@@ -47,7 +47,7 @@ function lf_render_link_settings_page()
     {
         echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
     }
-    echo '<a href="#tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a>';
+    echo '<a href="#tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a> ';
     echo '<a href="#tab-new" class="lf-tab-button" data-tab="tab-new" style="color:#33d">New Link</a>';
     echo '</div>';
     echo '<form method="post" class="lf-linkfolio-form">';
