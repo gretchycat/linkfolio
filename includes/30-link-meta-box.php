@@ -30,9 +30,9 @@ function lf_render_link_meta_box($post)
     echo '</div>';
 
     echo '<p style="margin-top:1em;">';
-    echo '<label><input type="checkbox" name="lf_detect_external" value="1" checked> Auto-detect external links</label><br>';
-    echo '<label><input type="checkbox" name="lf_detect_internal" value="1"> Auto-detect internal links</label><br>';
-    echo '<label><input type="checkbox" name="lf_detect_emails" value="1"> Auto-detect email links</label>';
+    echo '<label><input type="checkbox" name="lf_detect_external" value="1" checked> Auto-detect external links</label><br/>';
+    echo '<label><input type="checkbox" name="lf_detect_internal" value="1"> Auto-detect internal links</label><br/>';
+    echo '<label><input type="checkbox" name="lf_detect_emails" value="1"> Auto-detect email links</label><br/>';
     echo '<label><input type="checkbox" name="lf_delete_broken_links" value="0"> Auto-delete broken links</label>';
     echo '</p>';
 
