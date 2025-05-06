@@ -48,6 +48,7 @@ function lf_render_link_settings_page()
         echo '<a href="#tab-' . esc_attr($cat->slug) . '" class="lf-tab-button" data-tab="tab-' . esc_attr($cat->slug) . '">' . esc_html($cat->name) . '</a> ';
     }
     echo '<a href="#tab-broken" class="lf-tab-button" data-tab="tab-broken" style="color:#d33">Broken Links</a>';
+    echo '<a href="#tab-new" class="lf-tab-button" data-tab="tab-new" style="color:#33d">New Link</a>';
     echo '</div>';
     echo '<form method="post" class="lf-linkfolio-form">';
     // all the buttons and link/category rows here
@@ -66,6 +67,11 @@ function lf_render_link_settings_page()
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lf_render_broken_links();
     echo '</div>';
+
+    // Render new link section
+    echo '<div id="tab-new" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
+    echo '<h2 style="color:#33d">Nwn Link</h2>';
+ 
     $newlink = (object)[
         'id'          => 'new',
         'label'       => '',
@@ -76,6 +82,7 @@ function lf_render_link_settings_page()
         'status_code' => 404,
     ];
     lf_render_link_row_editor($newlink);
+    echo '</div>';
     echo '</form>';
     echo '</div>';
 
