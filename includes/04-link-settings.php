@@ -68,4 +68,16 @@ function lf_render_link_settings_page()
     echo '</div>';
     echo '</form>';
     echo '</div>';
+
+    $newlink = (object)[
+        'id'          => 'new',
+        'label'       => '',
+        'url'         => '',
+        'icon_url'    => '',
+        'description' => '',
+        'category'    => '',
+        'status_code' => 404,
+    ];
+    lf_render_link_row_editor($newlink);
+
 }

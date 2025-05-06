@@ -59,16 +59,6 @@ function lf_render_links_by_category($slug, $show_broken)
             lf_render_link_row_view($link, true, $show_broken);
         }
     }
-    $newlink = (object)[
-        'id'          => 'new',
-        'label'       => '',
-        'url'         => '',
-        'icon_url'    => '',
-        'description' => '',
-        'category'    => $slug ?? '',
-        'status_code' => 404,
-    ];
-    lf_render_link_row_editor($newlink);
 }
 
 function lf_render_broken_links() {
