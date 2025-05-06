@@ -46,8 +46,8 @@ function lf_render_links_by_category($slug, $show_broken)
         {#anchor here
             lf_render_link_row_editor($link);
         echo '<script>';
-        echo "document.getElementById('edit_link_$id').scrollIntoView({ behavior: 'smooth' });"
-        echo '</script>'
+        echo "document.getElementById('edit_link_$id').scrollIntoView({ behavior: 'smooth' });";
+        echo '</script>';
         }
         elseif (isset($_POST["saved_link_$id"]))
         {
