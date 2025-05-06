@@ -39,7 +39,7 @@ function lf_detect_links_in_post($post_id, $post)
         $code = wp_remote_retrieve_response_code($response);
         if ($code >= 400 && $code < 600) {
             $wpdb->insert($links_table, [
-                'label' => '';
+                'label' => '',
                 'status_code' => $code,
                 'url' => $url,
                 'icon_url' => '',
