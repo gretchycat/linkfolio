@@ -59,7 +59,7 @@ function lf_render_links_by_category($slug, $show_broken)
             lf_render_link_row_view($link, true, $show_broken);
         }
     }
-    $link = [
+    $newlink = [
         'id'          => 'new',
         'label'       => '',
         'url'         => '',
@@ -68,7 +68,7 @@ function lf_render_links_by_category($slug, $show_broken)
         'category'    => $slug ?? '',
         'status_code' => 404,
     ];
-    lf_render_link_row_editor($link);
+    lf_render_link_row_editor($newlink);
 }
 
 function lf_render_broken_links() {
