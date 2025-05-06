@@ -66,9 +66,6 @@ function lf_render_link_settings_page()
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lf_render_broken_links();
     echo '</div>';
-    echo '</form>';
-    echo '</div>';
-
     $newlink = (object)[
         'id'          => 'new',
         'label'       => '',
@@ -79,5 +76,7 @@ function lf_render_link_settings_page()
         'status_code' => 404,
     ];
     lf_render_link_row_editor($newlink);
+    echo '</form>';
+    echo '</div>';
 
 }
