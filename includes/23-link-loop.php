@@ -45,9 +45,17 @@ function lf_render_links_by_category($slug, $show_broken)
         if (isset($_POST["edit_link_$id"]))
         {#anchor here
             lf_render_link_row_editor($link);
-        echo '<script>';
-        echo "document.getElementById('edit_link_$id').scrollIntoView({ behavior: 'smooth' });";
-        echo '</script>';
+            echo <<<JS
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const el = document.getElementById('edit_link_$id');
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('link-highlight');
+    }
+});
+</script>
+JS;
         }
         elseif (isset($_POST["saved_link_$id"]))
         {
