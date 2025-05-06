@@ -1,5 +1,5 @@
 <?PHP
-
+/*
 add_action('admin_footer', function () {
     ?>
     <script>
@@ -20,7 +20,7 @@ add_action('admin_footer', function () {
     </script>
     <?php
 });
-
+ */
 function lf_scroll_to_element_script($id)
 {
     if (!empty($id)) 
