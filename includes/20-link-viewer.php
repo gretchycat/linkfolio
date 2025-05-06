@@ -55,7 +55,7 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
     }
 }
 
-function lf_render_link_mini-row_view($link, $include_edit = true, $show_broken = true)
+function lf_render_link_mini_row_view($link, $include_edit = true, $show_broken = true)
 {
     $link = (array) $link;
     $label = esc_html($link['label'] ?? '');
