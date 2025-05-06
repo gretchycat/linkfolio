@@ -1,5 +1,5 @@
 <?PHP
-/*
+
 add_action('admin_footer', function () {
     ?>
     <script>
@@ -20,21 +20,22 @@ add_action('admin_footer', function () {
     </script>
     <?php
 });
- */
+
 function lf_scroll_to_element_script($id)
 {
-    if (!empty($id)) 
-    {
-        echo <<<JS
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const el = document.getElementById('edit_link_$id');
-    if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        el.classList.add('link-highlight');
-    }
-});
-</script>
-JS;
+    if (!empty($id)) {
+        add_action('admin_footer', function () use ($id) {
+            ?>
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const el = document.getElementById('<?php echo esc_js($id); ?>');
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    el.classList.add('link-highlight');
+                }
+            });
+            </script>
+            <?php
+        });
     }
 }
