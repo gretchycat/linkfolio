@@ -62,3 +62,20 @@ function lf_render_link_settings_page() {
     echo '</form>';
     echo '</div>';
 }
+
+add_action('admin_footer', function ()
+{
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.location.hash && document.querySelector(window.location.hash))
+        {
+            const el = document.querySelector(window.location.hash);
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+    </script>
+    <?php
+)}
+
+
