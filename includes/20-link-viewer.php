@@ -12,11 +12,11 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
     $category = esc_html($link['category_slug'] ?? '');
     $id = (int)($link['id'] ?? 0);
     $code=(int)($link['status_code'] ?? 404);
-    $codestr='<span style="text-color: darkgreen;">'.$code.'</span>'; 
+    $codestr='<span style="color: darkgreen;">'.$code.'</span>'; 
     if (floor($code/100)==3 || floor($code/100)==5)
-        $codestr='<span style=" text-color: #770;">'.$code.'</span>'; 
+        $codestr='<span style=" color: #770;">'.$code.'</span>'; 
     if (floor($code/100)==4)
-        $codestr='<span style="text-color: darkred;">'.$code.'</span>'; 
+        $codestr='<span style="color: darkred;">'.$code.'</span>'; 
 
     if($show_broken || $code<400 || $code>=500)
     {
