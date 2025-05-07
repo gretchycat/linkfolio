@@ -19,19 +19,22 @@ function lf_render_link_meta_box($post)
     foreach($categories as $cat)
     {
         $cat_links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $cat->slug));
-        echo '<h2>' . esc_html($cat->name) . '</h2>';
-        foreach ($cat_links as $link)
+        if( esc_html($cat->name))!='Uncategorized')
         {
-            if (floor($link->status_code/100)==4)
+            echo '<h2>' . esc_html($cat->name) . '</h2>';
+            foreach ($cat_links as $link)
             {
-                $skipped_broken_links++;
-                continue;
+                if (floor($link->status_code/100)==4)
+                {
+                    $skipped_broken_links++;
+                    continue;
+                }
+                $checked = in_array($link->id, $selected_links) ? 'checked' : '';
+                echo '<div style="margin-bottom:1em;display:flex;align-items:center;gap:0.5em">';
+                echo '<input type="checkbox" name="lf_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
+                lf_render_link_mini_row_view($link, false, false);
+                echo '</div>';
             }
-            $checked = in_array($link->id, $selected_links) ? 'checked' : '';
-            echo '<div style="margin-bottom:1em;display:flex;align-items:center;gap:0.5em">';
-            echo '<input type="checkbox" name="lf_links[]" value="' . intval($link->id) . '" ' . $checked . '>';
-            lf_render_link_mini_row_view($link, false, false);
-            echo '</div>';
         }
     }
     echo '</div>';
