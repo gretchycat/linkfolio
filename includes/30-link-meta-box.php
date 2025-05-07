@@ -19,7 +19,7 @@ function lf_render_link_meta_box($post)
     foreach($categories as $cat)
     {
         $cat_links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $cat->slug));
-        if( esc_html($cat->name))!='Uncategorized')
+        if( esc_html($cat->name)!='Uncategorized')
         {
             echo '<h2>' . esc_html($cat->name) . '</h2>';
             foreach ($cat_links as $link)
