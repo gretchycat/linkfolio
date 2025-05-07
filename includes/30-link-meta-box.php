@@ -9,7 +9,6 @@ function lf_render_link_meta_box($post)
     $post_id = $post->ID;
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    $all_links = $wpdb->get_results("SELECT * FROM $links_table ORDER BY label ASC");
     $table = $wpdb->prefix . 'custom_links';
     $selected_links = $wpdb->get_col($wpdb->prepare("SELECT link_id FROM $assoc_table WHERE post_id = %d", $post_id));
 
@@ -20,7 +19,7 @@ function lf_render_link_meta_box($post)
     foreach($categories as $cat)
     {
         $catlinks = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $cat->slug));
-        foreach ($all_links as $link)
+        foreach ($cat_links as $link)
         {
             echo '<h2>' . esc_html($cat->name) . '</h2>';
             if (floor($link->status_code/100)==4)
