@@ -73,6 +73,7 @@ function lf_save_link_meta_box($post_id)
             ]);
     // Handle auto-detect links if requested
     lf_detect_links_in_post($post_id, $_POST);
+    lf_delete_broken_links($post_id, $_POST);
 }
 
 add_action('add_meta_boxes', function ()
