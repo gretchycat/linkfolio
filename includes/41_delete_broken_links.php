@@ -10,7 +10,7 @@ function lf_delete_broken_links($post_id, $post)
     if (!is_string($content)) return;
 
 
-    echo 'delete run';
+    echo '<pre>delete run</pre>';
     preg_match_all('/<a\s[^>]*href\s*=\s*["\']([^"\']+)["\'][^>]*>(.*?)<\/a>/is',
         stripslashes($content),
         $matches,
