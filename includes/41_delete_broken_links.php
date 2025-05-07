@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 
 function lf_delete_broken_links($post_id, $post)
 {
-    if (!isset($post['lf_delete_broken_links'])]) return;
+    if (!isset($post['lf_delete_broken_links'])) return;
 
     $content = $post['post_content'];
     if (!is_string($content)) return;
