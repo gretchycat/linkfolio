@@ -18,10 +18,10 @@ function lf_render_link_meta_box($post)
     $categories = lf_get_all_categories();
     foreach($categories as $cat)
     {
-        $catlinks = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $cat->slug));
+        $cat_links = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE category_slug = %s ORDER BY id ASC", $cat->slug));
+        echo '<h2>' . esc_html($cat->name) . '</h2>';
         foreach ($cat_links as $link)
         {
-            echo '<h2>' . esc_html($cat->name) . '</h2>';
             if (floor($link->status_code/100)==4)
             {
                 $skipped_broken_links++;
