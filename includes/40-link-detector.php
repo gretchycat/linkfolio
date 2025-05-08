@@ -8,17 +8,17 @@ function lf_update_link($url)
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
 
-    $label = ""v
-        if (empty($url)) continue;
+    $label = "";
+    if (empty($url)) return;
 
     $parsed = parse_url($url);
     $host = $parsed['host'] ?? '';
     $scheme = $parsed['scheme'] ?? '';
 
     // Filter types
-    if (str_starts_with($url, 'mailto:') && empty($post['lf_detect_email'])) continue;
-    if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lf_detect_external'])) continue;
-    if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lf_detect_internal'])) continue;
+    if (str_starts_with($url, 'mailto:') && empty($post['lf_detect_email'])) return;
+    if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lf_detect_external'])) return;
+    if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lf_detect_internal'])) return;
 
     // Get status code
     $response = wp_remote_head($url, ['timeout' => 6]);
