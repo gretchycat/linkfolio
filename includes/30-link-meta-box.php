@@ -43,7 +43,6 @@ function lf_render_link_meta_box($post)
     echo '<label><input type="checkbox" name="lf_detect_external" value="1" checked> Auto-detect external links</label><br/>';
     echo '<label><input type="checkbox" name="lf_detect_internal" value="1"> Auto-detect internal links</label><br/>';
     echo '<label><input type="checkbox" name="lf_detect_emails" value="1"> Auto-detect email links</label><br/>';
-    echo '<label><input type="checkbox" name="lf_delete_broken_links" value="0" style="color: #900;"> <span style="color: #900;">Auto-delete broken links</span></label>';
     echo '</p>';
 
     if ($skipped_broken_links > 0)
@@ -73,7 +72,6 @@ function lf_save_link_meta_box($post_id)
             ]);
     // Handle auto-detect links if requested
     lf_detect_links_in_post($post_id, $_POST);
-    lf_delete_broken_links($post_id, $_POST);
 }
 
 add_action('add_meta_boxes', function ()
