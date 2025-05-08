@@ -3,7 +3,11 @@
 
 defined('ABSPATH') || exit;
 
-function lf_initialize_database() {
+/**
+ * Initialize database tables for Linkfolio
+ */
+function lf_initialize_database()
+{
     global $wpdb;
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -31,29 +35,29 @@ CREATE TABLE $categories_table (
 CREATE TABLE $links_table (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
     label varchar(100) NOT NULL,
-    url text NOT NULL,
+    url varchar(255) NOT NULL,
     icon_url text DEFAULT '',
     description text DEFAULT '',
     category_slug varchar(100),
     status_code smallint(4),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE KEY unique_url (url)
 ) $charset_collate;
 
 CREATE TABLE $assoc_table (
     id mediumint(9) NOT NULL AUTO_INCREMENT,
-    post_id bigint(20) NOT NULL,
-    link_id mediumint(9) NOT NULL,
+    post_id bigint(20) UNSIGNED NOT NULL,
+    link_id mediumint(9) UNSIGNED NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY post_link (post_id, link_id)
+    UNIQUE KEY post_link (post_id, link_id),
+    INDEX link_idx (link_id),
+    FOREIGN KEY (link_id) REFERENCES $links_table(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES {$prefix}posts(ID) ON DELETE CASCADE
 ) $charset_collate;
 SQL;
 
     dbDelta($sql);
-
-    $columns = $wpdb->get_col("DESC $links_table", 0);
-    if (!in_array('status_code', $columns)) {
-        $wpdb->query("ALTER TABLE $links_table ADD status_code smallint(4) NULL");
-    }
+    lf_upgrade_links_schema_if_needed($links_table);
 
     if (!get_option('links_manager_first_run')) {
         add_option('links_manager_first_run', 'yes');
@@ -80,6 +84,34 @@ SQL;
                 ]);
             }
         }
+    }
+}
+
+/**
+ * Ensure database schema upgrades are performed
+ */
+function lf_upgrade_links_schema_if_needed($links_table)
+{
+    global $wpdb;
+
+    $columns = $wpdb->get_col("DESC $links_table", 0);
+    if (in_array('url', $columns)) {
+        $type = $wpdb->get_var("SHOW COLUMNS FROM $links_table LIKE 'url'");
+        if (stripos($type, 'text') !== false) {
+            $wpdb->query("ALTER TABLE $links_table MODIFY url VARCHAR(255) NOT NULL");
+        }
+    }
+
+    $indexes = $wpdb->get_results("SHOW INDEX FROM $links_table");
+    $has_unique = false;
+    foreach ($indexes as $index) {
+        if ($index->Key_name === 'unique_url' && !$index->Non_unique) {
+            $has_unique = true;
+            break;
+        }
+    }
+    if (!$has_unique) {
+        $wpdb->query("ALTER TABLE $links_table ADD UNIQUE KEY unique_url (url)");
     }
 }
 

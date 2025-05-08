@@ -17,9 +17,11 @@ function lf_detect_links_in_post($post_id, $post)
 
     $added = 0;
     $skipped = 0;
+
     global $wpdb;
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+
     foreach ($matches as $m) {
         $url = esc_url_raw(trim($m[1]));
         $label = wp_strip_all_tags($m[2]);
@@ -29,46 +31,44 @@ function lf_detect_links_in_post($post_id, $post)
         $host = $parsed['host'] ?? '';
         $scheme = $parsed['scheme'] ?? '';
 
-        // Determine type
+        // Filter types
         if (str_starts_with($url, 'mailto:') && empty($post['lf_detect_email'])) continue;
         if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lf_detect_external'])) continue;
         if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lf_detect_internal'])) continue;
 
-        // Check status
+        // Get status code
         $response = wp_remote_head($url, ['timeout' => 5]);
         $code = wp_remote_retrieve_response_code($response);
+
+        // Skip broken links, but record count
         if ($code >= 400 && $code < 600) {
-            $wpdb->insert($links_table, [
-                'label' => '',
-                'status_code' => $code,
-                'url' => $url,
-                'icon_url' => '',
-                'description' => '',
-                'category_slug' => 'references',
-            ]);
             $skipped++;
             continue;
         }
 
-        // Check if already exists
-        $existing = $wpdb->get_row($wpdb->prepare("SELECT id FROM $links_table WHERE url = %s", $url));
+        // Look up existing link
+        $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM $links_table WHERE url = %s", $url));
         $link_id = $existing->id ?? null;
 
         if (!$link_id) {
+            // Fetch page metadata
             $details = lf_fetch_page_metadata($url);
             $label = !empty($details['title']) ? $details['title'] : ($label ?: $url);
             $icon = $details['icon_url'] ?? '';
+
+            // Insert new link
             $wpdb->insert($links_table, [
-                'label' => $label,
-                'url' => $url,
-                'icon_url' => $icon,
-                'description' => '',
+                'label'         => $label,
+                'url'           => $url,
+                'icon_url'      => $icon,
+                'description'   => '',
                 'category_slug' => 'references',
-                'status_code' => $code,
+                'status_code'   => $code,
             ]);
             $link_id = $wpdb->insert_id;
         }
 
+        // Add association if not already present
         if ($link_id) {
             $exists = $wpdb->get_var($wpdb->prepare(
                 "SELECT COUNT(*) FROM $assoc_table WHERE post_id = %d AND link_id = %d",
