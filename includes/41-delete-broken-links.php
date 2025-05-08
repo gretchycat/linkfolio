@@ -12,7 +12,7 @@ function lf_delete_broken_links()
     if (empty($broken_links)) return;
 
     foreach($broken_links as $bl)
-        lf_delete_broken_link($bl->url)
+        lf_delete_broken_link($bl->url;)
 }
 
 function lf_delete_broken_link($url)
