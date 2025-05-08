@@ -22,7 +22,8 @@ function lf_detect_links_in_post($post_id, $post)
     $links_table = $wpdb->prefix . 'custom_links';
     $assoc_table = $wpdb->prefix . 'custom_link_post_map';
 
-    foreach ($matches as $m) {
+    foreach ($matches as $m)
+    {
         $url = esc_url_raw(trim($m[1]));
         $label = wp_strip_all_tags($m[2]);
         if (empty($url)) continue;
@@ -44,7 +45,8 @@ function lf_detect_links_in_post($post_id, $post)
         $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM $links_table WHERE url = %s", $url));
         $link_id = $existing->id ?? null;
 
-        if (!$link_id) {
+        if (!$link_id)
+        {
             // Fetch page metadata
             $details = lf_fetch_page_metadata($url);
             $label = !empty($details['title']) ? $details['title'] : ($label ?: $url);
@@ -63,13 +65,15 @@ function lf_detect_links_in_post($post_id, $post)
         }
 
         // Add association if not already present
-        if ($link_id) {
+        if ($link_id)
+        {
             $exists = $wpdb->get_var($wpdb->prepare(
                 "SELECT COUNT(*) FROM $assoc_table WHERE post_id = %d AND link_id = %d",
                 $post_id,
                 $link_id
             ));
-            if (!$exists) {
+            if (!$exists)
+            {
                 $wpdb->insert($assoc_table, [
                     'post_id' => $post_id,
                     'link_id' => $link_id,
