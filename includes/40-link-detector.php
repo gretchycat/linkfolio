@@ -40,12 +40,6 @@ function lf_detect_links_in_post($post_id, $post)
         $response = wp_remote_head($url, ['timeout' => 5]);
         $code = wp_remote_retrieve_response_code($response);
 
-        // Skip broken links, but record count
-        if ($code >= 400 && $code < 600) {
-            $skipped++;
-            continue;
-        }
-
         // Look up existing link
         $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM $links_table WHERE url = %s", $url));
         $link_id = $existing->id ?? null;
