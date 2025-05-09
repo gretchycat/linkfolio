@@ -14,13 +14,13 @@ function lf_rescan_broken_links()
     foreach($broken_links as $bl)
     {
         $bl->label='';
-        $links[]=$bl->url
+        $links[]=$bl->url;
         lf_save_link(get_object_vars($bl), $bl->id);
     }
-    add_action('admin_notices', function () use ($titles, $links) {
+    add_action('admin_notices', function () use ($links) {
         echo "<div class='notice notice-success is-dismissible'><p>";
         printf('Rescanned broken link(s) [%s]', implode(', ',$links));
-        echo "</p></div>";
-
+        echo "</p></div>";});
 }
+
 
