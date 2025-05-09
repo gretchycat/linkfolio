@@ -14,7 +14,7 @@ function lf_rescan_broken_links()
     foreach($broken_links as $bl)
     {
         $bl->label='';
-        lf_save_link($bl, $bl-Id);
+        lf_save_link(i(array)$bl, $bl->id);
     }
 }
 
