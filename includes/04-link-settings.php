@@ -14,7 +14,12 @@ function lf_render_link_settings_page()
 {
     foreach ($_POST as $key => $val)
     {
-        $gotoanchor='';
+        if ( $key === 'rescan_broken_links')
+            lf_rescan_broken_links();
+
+        if ( $key === 'delete_broken_links')
+            lf_delete_broken_links();
+
         if (preg_match('/^save_link_(\d+)$/', $key, $m) || $key === 'save_link_new')
         {
             $id = $m[1] ?? 'new';
@@ -68,6 +73,8 @@ function lf_render_link_settings_page()
     echo '<div id="tab-broken" class="lf-tab-content" style="background: rgba(0,0,0,0.10); padding: 1em;">';
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lf_render_broken_links();
+    // show check broken links
+    // show purge broken links
     echo '</div>';
 
     // Render new link section

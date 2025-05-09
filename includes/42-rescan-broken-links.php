@@ -12,9 +12,9 @@ function lf_rescan_broken_links()
     if (empty($broken_links)) return;
 
     foreach($broken_links as $bl)
-        lf_rescan_broken_link($bl->url);
+    {
+        $bl->label='';
+        lf_save_link($bl, $bl-Id);
+    }
 }
 
-function lf_rescan_broken_link($url)
-{
-}

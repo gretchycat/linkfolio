@@ -11,7 +11,7 @@ function lf_fetch_page_metadata($url) {
     $result = [
         'title' => '',
         'icon_url' => '',
-        'status_code' => null,
+        'status_code' => 404,
     ];
 
     if (empty($url)) {
