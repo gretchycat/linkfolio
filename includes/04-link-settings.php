@@ -74,6 +74,10 @@ function lf_render_link_settings_page()
     echo '<h2 style="color:#d33">Broken Links</h2>';
     lf_render_broken_links();
     // show check broken links
+    echo <<<BROKENLINKBULK
+    <input type="button" name="rescan_broken_links">
+    <input type="button" name="delete_broken_links">
+    BROKENLINKBULK
     // show purge broken links
     echo '</div>';
 
