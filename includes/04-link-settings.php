@@ -75,9 +75,9 @@ function lf_render_link_settings_page()
     lf_render_broken_links();
     // show check broken links
     echo <<<BROKENLINKBULK
-    <input type="button" name="rescan_broken_links">
-    <input type="button" name="delete_broken_links">
-    BROKENLINKBULK
+    <button type="submit" name="rescan_broken_links">Rescan</button>
+    <button type="submit" name="delete_broken_links">Purge</button>
+    BROKENLINKBULK;
     // show purge broken links
     echo '</div>';
 
