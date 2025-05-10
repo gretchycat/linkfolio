@@ -85,9 +85,10 @@ Support or feedback: $SUPPORT
 EOF
 
 # Build plugin folder and ZIP
+rm -rf build
 echo "Preparing zip package..."
 mkdir -p build/$PLUGIN_DIR
-rsync -av --exclude=".*" --exclude="plugin.json" --exclude="build" . build/$PLUGIN_DIR
+rsync -av --exclude="*.sh" --exclude=".*" --exclude="plugin.json" --exclude="build" . build/$PLUGIN_DIR
 
 cd build
 zip -r "../$ZIP_NAME" "$PLUGIN_DIR"
