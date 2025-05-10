@@ -1,0 +1,14 @@
+{
+  "name": "Linkfolio",
+  "slug": "Linkfolio",
+  "version": "0.1.5",
+  "description": "Manage, categorize, and scan links across your site with bulk actions and metadata detection.",
+  "author": "Gretchen Maculo",
+  "author_uri": "https://hopefaithless.42web.io",
+  "plugin_uri": "https://hopefaithless.42web.io/linkfolio",
+  "homepage": "https://hopefaithless.42web.io/linkfolio",
+  "support": "https://hopefaithless.42web.io/contact",
+  "license": "GPL2+",
+  "contributors": ["gretchycat"],
+  "tags": ["links", "utilities", "scan", "metadata", "admin"]
+}
