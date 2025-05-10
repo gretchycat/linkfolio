@@ -88,7 +88,7 @@ EOF
 rm -rf build
 echo "Preparing zip package..."
 mkdir -p build/$PLUGIN_DIR
-rsync -av --exclude="$0" --exclude="$ZIP_NAME" --exclude=".*" --exclude="plugin.json" --exclude="build" . build/$PLUGIN_DIR
+rsync -av --exclude="buildzip.sh" --exclude="$ZIP_NAME" --exclude=".*" --exclude="plugin.json" --exclude="build" . build/$PLUGIN_DIR
 
 cd build
 zip -r "../$ZIP_NAME" "$PLUGIN_DIR"
