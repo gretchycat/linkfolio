@@ -12,6 +12,11 @@ add_action('admin_enqueue_scripts', function ($hook) {
 // Main Linkfolio settings page
 function lf_render_link_settings_page()
 {
+    add_action('admin_enqueue_scripts', function ($hook) {
+        if (strpos($hook, 'linkfolio') !== false) {
+            wp_enqueue_media(); // this is essential
+    });
+
     foreach ($_POST as $key => $val)
     {
         if ( $key === 'rescan_broken_links')
