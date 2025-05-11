@@ -19,46 +19,43 @@ function lf_initialize_database()
     $links_table = $prefix . 'custom_links';
     $assoc_table = $prefix . 'custom_link_post_map';
 
-    $sql = <<<SQL
-CREATE TABLE $categories_table (
-    id mediumint(9) NOT NULL AUTO_INCREMENT,
-    name varchar(100) NOT NULL,
-    slug varchar(100) NOT NULL,
-    layout varchar(20) DEFAULT 'vertical',
-    `separator` varchar(10) DEFAULT '•',
-    show_url tinyint(1) DEFAULT 0,
-    show_icon tinyint(1) DEFAULT 1,
-    show_description tinyint(1) DEFAULT 1,
-    is_default tinyint(1) DEFAULT 0,
-    PRIMARY KEY (id),
-    UNIQUE KEY slug (slug)
-) $charset_collate;
+    $sql_categories = "CREATE TABLE $categories_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        name varchar(100) NOT NULL,
+        slug varchar(100) NOT NULL,
+        layout varchar(20) DEFAULT 'vertical',
+        `separator` varchar(10) DEFAULT '•',
+        show_url tinyint(1) DEFAULT 0,
+        show_icon tinyint(1) DEFAULT 1,
+        show_description tinyint(1) DEFAULT 1,
+        is_default tinyint(1) DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY slug (slug)
+) $charset_collate;";
 
-CREATE TABLE $links_table (
-    id mediumint(9) NOT NULL AUTO_INCREMENT,
-    label varchar(100) NOT NULL,
-    url varchar(255) NOT NULL,
-    icon_url text DEFAULT '',
-    description text DEFAULT '',
-    category_slug varchar(100),
-    status_code smallint(4),
-    PRIMARY KEY (id),
-    UNIQUE KEY unique_url (url)
-) $charset_collate;
+    $sql_links = "CREATE TABLE $links_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        label varchar(100) NOT NULL,
+        url varchar(255) NOT NULL,
+        icon_url text DEFAULT '',
+        description text DEFAULT '',
+        category_slug varchar(100),
+        status_code smallint(4),
+        PRIMARY KEY (id),
+        UNIQUE KEY unique_url (url)
+) $charset_collate;";
 
-CREATE TABLE $assoc_table (
-    id mediumint(9) NOT NULL AUTO_INCREMENT,
-    post_id bigint(20) UNSIGNED NOT NULL,
-    link_id mediumint(9) UNSIGNED NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY post_link (post_id, link_id),
-    INDEX link_idx (link_id),
-    FOREIGN KEY (link_id) REFERENCES $links_table(id) ON DELETE CASCADE,
-    FOREIGN KEY (post_id) REFERENCES {$prefix}posts(ID) ON DELETE CASCADE
-) $charset_collate;
-SQL;
-
-    dbDelta($sql);
+    $sql_assoc = "CREATE TABLE $assoc_table (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        post_id bigint(20) UNSIGNED NOT NULL,
+        link_id mediumint(9) UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY post_link (post_id, link_id),
+        INDEX link_idx (link_id)
+) $charset_collate;";
+    dbDelta($sql_categories);
+    dbDelta($sql_links);
+    dbDelta($sql_assoc);
 
     if (!get_option('linkfolio_first_run')) {
         add_option('linkfolio_first_run', 'yes');
