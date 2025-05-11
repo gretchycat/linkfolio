@@ -1,7 +1,7 @@
 <?php
 // db.php
 
-define('LINKFOLIO_SCHEMA_VERSION', '0.1.5');
+define('LINKFOLIO_SCHEMA_VERSION', '1');
 
 defined('ABSPATH') || exit;
 
@@ -31,7 +31,7 @@ function lf_initialize_database()
         is_default tinyint(1) DEFAULT 0,
         PRIMARY KEY (id),
         UNIQUE KEY slug (slug)
-) $charset_collate;";
+        ) $charset_collate;";
 
     $sql_links = "CREATE TABLE $links_table (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -43,7 +43,7 @@ function lf_initialize_database()
         status_code smallint(4),
         PRIMARY KEY (id),
         UNIQUE KEY unique_url (url)
-) $charset_collate;";
+        ) $charset_collate;";
 
     $sql_assoc = "CREATE TABLE $assoc_table (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -52,7 +52,8 @@ function lf_initialize_database()
         PRIMARY KEY (id),
         UNIQUE KEY post_link (post_id, link_id),
         INDEX link_idx (link_id)
-) $charset_collate;";
+        ) $charset_collate;";
+
     dbDelta($sql_categories);
     dbDelta($sql_links);
     dbDelta($sql_assoc);
