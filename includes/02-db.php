@@ -1,6 +1,8 @@
 <?php
 // db.php
 
+define('LINKFOLIO_SCHEMA_VERSION', '0.1.5');
+
 defined('ABSPATH') || exit;
 
 /**
@@ -57,10 +59,9 @@ CREATE TABLE $assoc_table (
 SQL;
 
     dbDelta($sql);
-    lf_upgrade_links_schema_if_needed($links_table);
 
-    if (!get_option('links_manager_first_run')) {
-        add_option('links_manager_first_run', 'yes');
+    if (!get_option('linkfolio_first_run')) {
+        add_option('linkfolio_first_run', 'yes');
         $defaults = [
             ['Uncategorized', 'uncategorized', 0],
             ['Social', 'social', 0],
@@ -87,33 +88,18 @@ SQL;
     }
 }
 
-/**
- * Ensure database schema upgrades are performed
- */
-function lf_upgrade_links_schema_if_needed($links_table)
+function lf_check_and_upgrade_schema()
 {
-    global $wpdb;
+    $current_version = get_option('linkfolio_schema_version');
 
-    $columns = $wpdb->get_col("DESC $links_table", 0);
-    if (in_array('url', $columns)) {
-        $type = $wpdb->get_var("SHOW COLUMNS FROM $links_table LIKE 'url'");
-        if (stripos($type, 'text') !== false) {
-            $wpdb->query("ALTER TABLE $links_table MODIFY url VARCHAR(255) NOT NULL");
-        }
-    }
-
-    $indexes = $wpdb->get_results("SHOW INDEX FROM $links_table");
-    $has_unique = false;
-    foreach ($indexes as $index) {
-        if ($index->Key_name === 'unique_url' && !$index->Non_unique) {
-            $has_unique = true;
-            break;
-        }
-    }
-    if (!$has_unique) {
-        $wpdb->query("ALTER TABLE $links_table ADD UNIQUE KEY unique_url (url)");
+    if ($current_version !== LINKFOLIO_SCHEMA_VERSION) {
+        lf_initialize_database(); // also handles upgrades internally
+        update_option('linkfolio_schema_version', LINKFOLIO_SCHEMA_VERSION);
     }
 }
+
+register_activation_hook(__FILE__, 'lf_initialize_database');
+add_action('admin_init', 'lf_check_and_upgrade_schema');
 
 function lf_get_all_categories() {
     global $wpdb;
@@ -151,12 +137,6 @@ function lf_save_link($data, $id = null) {
     global $wpdb;
     $table = $wpdb->prefix . 'custom_links';
     // Ensure the 'status_code' column exists
-    $has_column = $wpdb->get_var("SHOW COLUMNS FROM $table LIKE 'status_code'");
-    if (!$has_column) {
-    $wpdb->query("ALTER TABLE $table ADD COLUMN status_code SMALLINT DEFAULT NULL");
-}
-    global $wpdb;
-    $table = $wpdb->prefix . 'custom_links';
 
     $manual_icon = $data['icon_url'] ?? '';
     $url = $data['url'] ?? '';

@@ -4,8 +4,8 @@ set -e
 META_FILE="plugin.json"
 
 if [ ! -f "$META_FILE" ]; then
-	echo "Error: $META_FILE not found"
-	exit 1
+    echo "Error: $META_FILE not found"
+    exit 1
 fi
 
 # Extract metadata from plugin.json
@@ -26,8 +26,8 @@ TAGS=$(jq -r '.tags | join(", ")' "$META_FILE")
 # Auto-detect main plugin file
 MAIN_FILE=$(find . -maxdepth 1 -type f -name "*.php" | head -n1 | sed 's|^\./||')
 if [ -z "$MAIN_FILE" ]; then
-	echo "Error: No PHP plugin file found in current directory"
-	exit 1
+    echo "Error: No PHP plugin file found in current directory"
+    exit 1
 fi
 
 PLUGIN_DIR="$SLUG"
@@ -35,7 +35,6 @@ ZIP_NAME="$SLUG.zip"
 
 # Create plugin header block
 HEADER=$(cat <<EOF
-<?php
 /*
 Plugin Name: $NAME
 Plugin URI: $PLUGIN_URI
@@ -52,8 +51,11 @@ EOF
 
 # Replace the header in the main plugin file
 echo "Updating plugin header in $MAIN_FILE..."
-awk '/^\s*<\?php/ { print; print ""; system("echo \"$HEADER\""); nextfile } 1' "$MAIN_FILE" > "$MAIN_FILE.tmp" && mv "$MAIN_FILE.tmp" "$MAIN_FILE"
+# Replace first comment block with marker
+perl -0777 -pe "s|/\*.*?\*/|$HEADER|s" "$MAIN_FILE" > "$MAIN_FILE.tmp" 
+mv "$MAIN_FILE.tmp" "$MAIN_FILE"
 
+# Inject header via here-doc instead of echo/awk string interpolation
 # Generate readme.txt
 echo "Generating readme.txt..."
 cat > readme.txt <<EOF
