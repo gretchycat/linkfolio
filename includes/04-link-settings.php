@@ -13,9 +13,11 @@ add_action('admin_enqueue_scripts', function ($hook) {
 function lf_render_link_settings_page()
 {
     add_action('admin_enqueue_scripts', function ($hook) {
-        if (strpos($hook, 'linkfolio') !== false) {
+        if (strpos($hook, 'linkfolio') !== false) 
+        {
             wp_enqueue_media(); // this is essential
-    });
+        }
+        });
 
     foreach ($_POST as $key => $val)
     {
