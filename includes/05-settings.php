@@ -49,7 +49,7 @@ function lf_render_linkfolio_page() {
     echo '</ul>';
     echo '<p>Use the sidebar menu to manage <strong>Links</strong>, <strong>Categories</strong>, and <strong>Broken Links</strong>.</p>';
     echo '<a href="/wp-admin/admin.php?page=linkfolio-edit-links">edit links</a>' ;
-    echo '<a href="/wp-admin/admin.php?page=linkfolio-edit-categories">edit categories</a>' ;
+    echo '<a href="/wp-admin/admin.php?page=linkfolio-edit-categories">edit categories</a> ';
     echo '<p style="margin-top:2em;color:#777;font-size:0.9em;">Plugin by <strong>Gretchen Maculo</strong>. Version 0.1.3</p>';
     echo '</div>';
     echo '</div>';
