@@ -40,16 +40,16 @@ function lf_render_link_meta_box($post)
     echo '</div>';
 
     echo '<p style="margin-top:1em;">';
-    echo '<label><input type="checkbox" name="lf_detect_external" value="1" checked> Auto-detect external links</label><br/>';
+    echo '<label><input type="checkbox" name="lf_detect_external" value="1" > Auto-detect external links</label><br/>';
     echo '<label><input type="checkbox" name="lf_detect_internal" value="1"> Auto-detect internal links</label><br/>';
     echo '<label><input type="checkbox" name="lf_detect_emails" value="1"> Auto-detect email links</label><br/>';
     echo '</p>';
-
+    echo 'Note: detecting new links, fetching all the pages and icons can take a while.';
     if ($skipped_broken_links > 0)
     {
         add_action('admin_notices', function () use ($skipped_broken_links) {
             echo '<div class="notice notice-warning is-dismissible">';
-            echo '<p><strong>Warning:</strong> ' . $skipped_broken_links . ' broken link(s) skipped. See the <a href="' . admin_url('admin.php?page=links-manager') . '">Link Manager settings</a>.</p>';
+            echo '<p><strong>Warning:</strong> ' . $skipped_broken_links . ' broken link(s) skipped. See the <a href="' . admin_url('/wp-admin/admin.php?page=linkfolio-edit-links') . '">Linkfolio settings</a>.</p>';
             echo '</div>';
         });
     }
