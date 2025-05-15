@@ -36,10 +36,6 @@ function lf_detect_links_in_post($post_id, $post)
         if (!empty($host) && $host !== $_SERVER['HTTP_HOST'] && empty($post['lf_detect_external'])) continue;
         if ((!$host || $host === $_SERVER['HTTP_HOST']) && empty($post['lf_detect_internal'])) continue;
 
-        // Get status code
-        $response = wp_remote_head($url, ['timeout' => 5]);
-        $code = wp_remote_retrieve_response_code($response);
-
         // Look up existing link
         $existing = $wpdb->get_row($wpdb->prepare("SELECT * FROM $links_table WHERE url = %s", $url));
         $link_id = $existing->id ?? null;
@@ -50,7 +46,7 @@ function lf_detect_links_in_post($post_id, $post)
             $details = lf_fetch_page_metadata($url);
             $label = !empty($details['title']) ? $details['title'] : ($label ?: $url);
             $icon = $details['icon_url'] ?? '';
-
+            $code = $details['status_code'] ?? 399;
             // Insert new link
             $wpdb->insert($links_table, [
                 'label'         => $label,
