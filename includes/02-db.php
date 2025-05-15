@@ -117,6 +117,20 @@ function lf_ensure_tables_exist()
     }
 }
 
+function lf_prune_orphaned_link_associations()
+{
+    global $wpdb;
+    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+    $links_table = $wpdb->prefix . 'custom_links';
+
+    // Delete associations where link_id no longer exists
+    $wpdb->query("
+        DELETE a FROM $assoc_table a
+        LEFT JOIN $links_table l ON a.link_id = l.id
+        WHERE l.id IS NULL
+    ");
+}
+
 register_activation_hook(__FILE__, 'lf_initialize_database');
 add_action('admin_init', 'lf_check_and_upgrade_schema');
 
