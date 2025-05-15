@@ -8,6 +8,7 @@ defined('ABSPATH') || exit;
  */
 function lf_is_image_url($url)
 {
+    return true;
     $head = wp_remote_head($url, ['timeout' => 5]);
     if (is_wp_error($head)) return false;
     $type = wp_remote_retrieve_header($head, 'content-type');
@@ -205,17 +206,19 @@ function lf_get_icon_for_url($page_url)
 
     // 4. Fetch page HTML for further checks
     $response = wp_remote_get($page_url, ['timeout' => 8]);
-    $html = $response['body'];
-
-    // 5. Check Discord-style icon paths at full domain
-    $icon_url = lf_handle_discord_icon_case($html, $scheme_host);
-    if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
-
-    // 6. Check Discord-style icon paths at root domain
-    if ($root_domain !== $domain) 
+    if (!is_wp_error($response) && !empty($response['body'])) 
     {
-        $icon_url = lf_handle_discord_icon_case($html, $scheme_root);
-        if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
+        $html = $response['body'];
+
+        // 5. Check Discord-style icon paths at full domain
+        $icon_url = lf_handle_discord_icon_case($html, $scheme_host);
+        if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
+
+        // 6. Check Discord-style icon paths at root domain
+        if ($root_domain !== $domain) 
+        {
+            $icon_url = lf_handle_discord_icon_case($html, $scheme_root);
+            if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
         }
 
         // 7. Check <link rel="icon"> in page HTML at full domain
@@ -228,6 +231,7 @@ function lf_get_icon_for_url($page_url)
             foreach (lf_find_icon_links_in_html($html, $scheme_root) as $url) {
                 if (lf_is_image_url($url)) return lf_sideload_and_store_icon($url, $root_domain);
             }
+        }
     }
 
     return ''; // fallback, or your default icon
