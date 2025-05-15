@@ -56,7 +56,7 @@ function lf_try_standard_icon_locations($scheme_host)
  * @param string $base_url The page URL (for normalizing relative paths)
  * @return array           Array of icon URLs (strings)
  */
-function lf_find_icon_links_dom($html, $base_url)
+function lf_find_icon_links_in_html($html, $base_url)
 {
     $icons = [];
 
