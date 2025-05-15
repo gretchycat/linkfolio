@@ -75,55 +75,66 @@ function lf_find_icon_url($html, $page_url)
 }
 
 /**
- * Sideloads a favicon or site icon, making sure to use the correct extension.
+ * Returns the icon media URL for a given icon, avoiding duplicates by domain.
  *
- * @param string $icon_url Validated icon URL (must be an image).
- * @param int    $post_id  Optional. Attach to this post ID.
- * @return string          The media URL, or '' on failure.
+ * @param string $icon_url  The icon image URL.
+ * @param string $page_url  The page URL (for extracting domain).
+ * @return string           Attachment URL in media library, or '' on failure.
  */
-function lf_sideload_icon($icon_url, $post_id = 0)
+function lf_sideload_icon_unique($icon_url, $page_url)
 {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/media.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
+    // 1. Extract domain for filename
+    $parts = parse_url($page_url);
+    $domain = $parts['host'] ?? 'site-icon';
+    $domain = preg_replace('/^www\./', '', strtolower($domain)); // remove 'www.'
+
+    // 2. Get the content type from HTTP headers
+    $head = wp_remote_head($icon_url);
+    $type = strtolower(wp_remote_retrieve_header($head, 'content-type'));
+    $ext = '.ico'; // default fallback
+    if (strpos($type, 'png') !== false) $ext = '.png';
+    elseif (strpos($type, 'jpeg') !== false) $ext = '.jpg';
+    elseif (strpos($type, 'gif') !== false) $ext = '.gif';
+    elseif (strpos($type, 'svg') !== false) $ext = '.svg';
+    elseif (strpos($type, 'bmp') !== false) $ext = '.bmp';
+    elseif (strpos($type, 'webp') !== false) $ext = '.webp';
+
+    $filename = $domain . $ext;
+
+    // 3. See if file already exists in Media Library
+    $existing = get_posts([
+        'post_type' => 'attachment',
+        'posts_per_page' => 1,
+        'meta_query' => [
+            [
+                'key' => '_wp_attached_file',
+                'value' => $filename,
+                'compare' => 'LIKE'
+            ]
+        ]
+    ]);
+    if (!empty($existing)) {
+        return wp_get_attachment_url($existing[0]->ID);
+    }
+
+    // 4. Download and sideload new icon
     $tmp = download_url($icon_url);
     if (is_wp_error($tmp)) {
         return '';
     }
-
-    // Detect content type from HTTP headers
-    $head = wp_remote_head($icon_url);
-    $type = wp_remote_retrieve_header($head, 'content-type');
-    $ext = '';
-    if ($type === 'image/png') $ext = '.png';
-    elseif ($type === 'image/jpeg') $ext = '.jpg';
-    elseif ($type === 'image/gif') $ext = '.gif';
-    elseif ($type === 'image/svg+xml') $ext = '.svg';
-    elseif ($type === 'image/x-icon' || $type === 'image/vnd.microsoft.icon') $ext = '.ico';
-
-    // Fallback: Use file extension from URL if type is unknown
-    if (!$ext) {
-        $url_path = parse_url($icon_url, PHP_URL_PATH);
-        $ext = strtolower(strrchr($url_path, '.'));
-        if (!$ext) $ext = '.ico'; // very last resort
-    }
-
-    $filename = 'site-icon' . $ext;
     $file_array = [
         'name' => $filename,
         'tmp_name' => $tmp,
     ];
-
-    // Sideload
-    $attach_id = media_handle_sideload($file_array, $post_id, 'Site Icon');
+    $attach_id = media_handle_sideload($file_array, 0, 'Site Icon for ' . $domain);
+    @unlink($tmp);
     if (is_wp_error($attach_id)) {
-        @unlink($tmp);
         return '';
     }
-    // Clean up
-    @unlink($tmp);
-
     return wp_get_attachment_url($attach_id);
 }
 
@@ -161,7 +172,7 @@ function lf_fetch_page_metadata($url)
     $base_url = $parts['scheme'] . '://' . $parts['host'];
 
     // Get best icon image URL
-    $icon_url = lf_find_icon_url($html, $base_url);
+    $icon_url = lf_sideload_icon_unique($html, $base_url);
 
     return [
         'title' => $title,
