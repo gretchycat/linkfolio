@@ -51,21 +51,18 @@ function lf_try_standard_icon_locations($scheme_host)
 function lf_find_icon_links_in_html($html, $base_url)
 {
     $icons = [];
-    if (preg_match_all('/<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>/i', $html, $matches, PREG_SET_ORDER)) {
+    if (preg_match_all('/<link\s+[^>]*rel=["\']?([^"\'>]+icon[^"\'>]*)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>/i', $html, $matches, PREG_SET_ORDER)) {
         foreach ($matches as $m) {
-            $rel = strtolower($m[1]);
             $href = html_entity_decode($m[2]);
-            if (strpos($rel, 'icon') !== false) {
-                // Make absolute if necessary
-                if (strpos($href, '//') === 0) {
-                    $parsed = parse_url($base_url);
-                    $href = $parsed['scheme'] . ':' . $href;
-                } elseif (strpos($href, 'http') !== 0) {
-                    $parts = parse_url($base_url);
-                    $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
-                }
-                $icons[] = $href;
+            // Make relative URLs absolute
+            if (strpos($href, '//') === 0) {
+                $parsed = parse_url($base_url);
+                $href = $parsed['scheme'] . ':' . $href;
+            } elseif (strpos($href, 'http') !== 0) {
+                $parts = parse_url($base_url);
+                $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
             }
+            $icons[] = $href;
         }
     }
     return $icons;
