@@ -246,7 +246,7 @@ function lf_fetch_page_metadata($url)
         return [
             'title' => '',
             'icon_url' => '',
-            'status_code' => 499,
+            'status_code' => 399,
         ];
     }
 
