@@ -79,9 +79,15 @@ function lf_fetch_page_metadata($url)
         ]
     ]);
     if (is_wp_error($response) || empty($response['body'])) {
-        return [];
+        return [
+            'title' => '',
+            'icon_url' => '',
+            'status_code' => 0,
+        ];
     }
+
     $html = $response['body'];
+    $status_code = wp_remote_retrieve_response_code($response);
 
     // Get title
     $title = '';
@@ -99,5 +105,6 @@ function lf_fetch_page_metadata($url)
     return [
         'title' => $title,
         'icon_url' => $icon_url,
+        'status_code' => (int)$status_code,
     ];
 }
