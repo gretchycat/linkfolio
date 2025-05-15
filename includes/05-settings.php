@@ -33,11 +33,10 @@ add_action('admin_menu', function () {
     );
 }, 11);
 
-add_action('admin_init', 'lf_ensure_tables_exist');
-
 add_action('admin_init', function() {
     lf_ensure_tables_exist();
     lf_prune_orphaned_link_associations();
+    lf_prune_orphaned_post_associations();
 });
 
 // Default Linkfolio "About" page
