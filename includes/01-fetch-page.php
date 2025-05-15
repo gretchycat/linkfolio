@@ -149,6 +149,15 @@ function lf_sideload_and_store_icon($icon_url, $domain)
     return wp_get_attachment_url($attach_id);
 }
 
+function lf_get_root_domain($host)
+{
+    $parts = explode('.', $host);
+    if (count($parts) > 2) {
+        return $parts[count($parts)-2] . '.' . $parts[count($parts)-1];
+    }
+    return $host;
+}
+
 function lf_get_icon_for_url($page_url)
 {
     $parts = parse_url($page_url);
