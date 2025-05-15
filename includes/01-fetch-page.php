@@ -92,18 +92,22 @@ function lf_sideload_icon($icon_url, $post_id = 0)
         return '';
     }
 
-    // Get content type from HTTP headers (not just file extension!)
+    // Detect content type from HTTP headers
     $head = wp_remote_head($icon_url);
-    $type = strtolower(wp_remote_retrieve_header($head, 'content-type'));
-    $ext = '.ico'; // fallback
+    $type = wp_remote_retrieve_header($head, 'content-type');
+    $ext = '';
+    if ($type === 'image/png') $ext = '.png';
+    elseif ($type === 'image/jpeg') $ext = '.jpg';
+    elseif ($type === 'image/gif') $ext = '.gif';
+    elseif ($type === 'image/svg+xml') $ext = '.svg';
+    elseif ($type === 'image/x-icon' || $type === 'image/vnd.microsoft.icon') $ext = '.ico';
 
-    // Smart extension based on real file type
-    if (strpos($type, 'png') !== false) $ext = '.png';
-    elseif (strpos($type, 'jpeg') !== false) $ext = '.jpg';
-    elseif (strpos($type, 'gif') !== false) $ext = '.gif';
-    elseif (strpos($type, 'svg') !== false) $ext = '.svg';
-    elseif (strpos($type, 'bmp') !== false) $ext = '.bmp';
-    elseif (strpos($type, 'webp') !== false) $ext = '.webp';
+    // Fallback: Use file extension from URL if type is unknown
+    if (!$ext) {
+        $url_path = parse_url($icon_url, PHP_URL_PATH);
+        $ext = strtolower(strrchr($url_path, '.'));
+        if (!$ext) $ext = '.ico'; // very last resort
+    }
 
     $filename = 'site-icon' . $ext;
     $file_array = [
@@ -111,11 +115,15 @@ function lf_sideload_icon($icon_url, $post_id = 0)
         'tmp_name' => $tmp,
     ];
 
+    // Sideload
     $attach_id = media_handle_sideload($file_array, $post_id, 'Site Icon');
-    @unlink($tmp);
     if (is_wp_error($attach_id)) {
+        @unlink($tmp);
         return '';
     }
+    // Clean up
+    @unlink($tmp);
+
     return wp_get_attachment_url($attach_id);
 }
 
