@@ -15,43 +15,41 @@ function lf_is_image_url($url)
 }
 
 /**
- * Find the best icon URL for a given page HTML + base URL.
+ * Finds the best icon URL from a page's HTML and base URL.
+ *
+ * @param string $html      The HTML source of the page.
+ * @param string $page_url  The original URL fetched (used for absolute paths).
+ * @return string           The first valid image URL found, or empty string.
  */
 function lf_find_icon_url($html, $page_url)
 {
     $candidates = [];
 
-    // 1. Parse all <link> tags for icon candidates
-    if (preg_match_all('/<link\s+([^>]+)>/i', $html, $matches)) {
-        foreach ($matches[1] as $attrs) {
-            // Match rel attribute
-            if (preg_match('/rel=["\']?([^"\'> ]+)["\']?/i', $attrs, $rel_match)) {
-                $rel = strtolower($rel_match[1]);
-                if (
-                    strpos($rel, 'icon') !== false ||
-                    strpos($rel, 'apple-touch-icon') !== false ||
-                    strpos($rel, 'mask-icon') !== false ||
-                    strpos($rel, 'fluid-icon') !== false ||
-                    strpos($rel, 'alternate icon') !== false
-                ) {
-                    // Find href
-                    if (preg_match('/href=["\']?([^"\'> ]+)["\']?/i', $attrs, $href_match)) {
-                        $href = html_entity_decode($href_match[1]);
-                        // Convert to absolute if necessary
-                        if (strpos($href, '//') === 0) {
-                            // Protocol-relative
-                            $parsed = parse_url($page_url);
-                            $href = $parsed['scheme'] . ':' . $href;
-                        } elseif (strpos($href, 'http') !== 0) {
-                            // Relative path
-                            $parts = parse_url($page_url);
-                            $base = $parts['scheme'] . '://' . $parts['host'];
-                            if (!empty($parts['port'])) $base .= ':' . $parts['port'];
-                            $href = $base . '/' . ltrim($href, '/');
-                        }
-                        $candidates[] = $href;
-                    }
+    // 1. Parse all <link> tags for icon candidates (robust rel check)
+    if (preg_match_all('/<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>/i', $html, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $m) {
+            $rel = strtolower($m[1]);
+            $href = html_entity_decode($m[2]);
+            if (
+                strpos($rel, 'icon') !== false ||
+                strpos($rel, 'apple-touch-icon') !== false ||
+                strpos($rel, 'mask-icon') !== false ||
+                strpos($rel, 'fluid-icon') !== false ||
+                strpos($rel, 'alternate icon') !== false
+            ) {
+                // Protocol-relative (starts with //)
+                if (strpos($href, '//') === 0) {
+                    $parsed = parse_url($page_url);
+                    $href = $parsed['scheme'] . ':' . $href;
                 }
+                // Relative (does not start with http/https)
+                elseif (strpos($href, 'http') !== 0) {
+                    $parts = parse_url($page_url);
+                    $base = $parts['scheme'] . '://' . $parts['host'];
+                    if (!empty($parts['port'])) $base .= ':' . $parts['port'];
+                    $href = $base . '/' . ltrim($href, '/');
+                }
+                $candidates[] = $href;
             }
         }
     }
@@ -60,7 +58,7 @@ function lf_find_icon_url($html, $page_url)
     $parts = parse_url($page_url);
     $scheme_host = $parts['scheme'] . '://' . $parts['host'];
     $candidates[] = $scheme_host . '/favicon.ico';
-    // Try root (naked) domain
+    // Try root (naked) domain if this is a subdomain
     $domain_parts = explode('.', $parts['host']);
     if (count($domain_parts) > 2) {
         $root_domain = $domain_parts[count($domain_parts) - 2] . '.' . $domain_parts[count($domain_parts) - 1];
@@ -74,6 +72,59 @@ function lf_find_icon_url($html, $page_url)
         }
     }
     return '';
+}
+
+/**
+ * Sideloads a favicon or site icon, making sure to use the correct extension.
+ *
+ * @param string $icon_url Validated icon URL (must be an image).
+ * @param int    $post_id  Optional. Attach to this post ID.
+ * @return string          The media URL, or '' on failure.
+ */
+function lf_sideload_icon($icon_url, $post_id = 0)
+{
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+
+    $tmp = download_url($icon_url);
+    if (is_wp_error($tmp)) {
+        return '';
+    }
+
+    // Detect content type from HTTP headers
+    $head = wp_remote_head($icon_url);
+    $type = wp_remote_retrieve_header($head, 'content-type');
+    $ext = '';
+    if ($type === 'image/png') $ext = '.png';
+    elseif ($type === 'image/jpeg') $ext = '.jpg';
+    elseif ($type === 'image/gif') $ext = '.gif';
+    elseif ($type === 'image/svg+xml') $ext = '.svg';
+    elseif ($type === 'image/x-icon' || $type === 'image/vnd.microsoft.icon') $ext = '.ico';
+
+    // Fallback: Use file extension from URL if type is unknown
+    if (!$ext) {
+        $url_path = parse_url($icon_url, PHP_URL_PATH);
+        $ext = strtolower(strrchr($url_path, '.'));
+        if (!$ext) $ext = '.ico'; // very last resort
+    }
+
+    $filename = 'site-icon' . $ext;
+    $file_array = [
+        'name' => $filename,
+        'tmp_name' => $tmp,
+    ];
+
+    // Sideload
+    $attach_id = media_handle_sideload($file_array, $post_id, 'Site Icon');
+    if (is_wp_error($attach_id)) {
+        @unlink($tmp);
+        return '';
+    }
+    // Clean up
+    @unlink($tmp);
+
+    return wp_get_attachment_url($attach_id);
 }
 
 /**
