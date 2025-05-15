@@ -48,23 +48,46 @@ function lf_try_standard_icon_locations($scheme_host)
     return false;
 }
 
-function lf_find_icon_links_in_html($html, $base_url)
+/**
+ * Find all icon link URLs in HTML robustly (order, quoting, etc. don't matter).
+ * Returns an array of icon URLs (absolute if possible).
+ *
+ * @param string $html     The HTML source (should include <head>...</head>)
+ * @param string $base_url The page URL (for normalizing relative paths)
+ * @return array           Array of icon URLs (strings)
+ */
+function lf_find_icon_links_dom($html, $base_url)
 {
     $icons = [];
-    if (preg_match_all('/<link\s+[^>]*rel=["\']?([^"\'>]+icon[^"\'>]*)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>/i', $html, $matches, PREG_SET_ORDER)) {
-        foreach ($matches as $m) {
-            $href = html_entity_decode($m[2]);
-            // Make relative URLs absolute
-            if (strpos($href, '//') === 0) {
-                $parsed = parse_url($base_url);
-                $href = $parsed['scheme'] . ':' . $href;
-            } elseif (strpos($href, 'http') !== 0) {
-                $parts = parse_url($base_url);
-                $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
+
+    // 1. Grab all <link ...> tags
+    if (!preg_match_all('/<link\s[^>]*>/i', $html, $matches)) {
+        return [];
+    }
+
+    foreach ($matches[0] as $tag) {
+        // 2. Parse each tag's attributes
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<html><head>' . $tag . '</head></html>'); // Suppress errors for bad HTML
+
+        $links = $dom->getElementsByTagName('link');
+        foreach ($links as $link) {
+            $rel = $link->getAttribute('rel');
+            $href = $link->getAttribute('href');
+            if ($rel && stripos($rel, 'icon') !== false && $href) {
+                // Normalize to absolute URL if necessary
+                if (strpos($href, '//') === 0) {
+                    $parsed = parse_url($base_url);
+                    $href = $parsed['scheme'] . ':' . $href;
+                } elseif (strpos($href, 'http') !== 0) {
+                    $parts = parse_url($base_url);
+                    $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
+                }
+                $icons[] = $href;
             }
-            $icons[] = $href;
         }
     }
+
     return $icons;
 }
 
