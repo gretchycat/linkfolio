@@ -14,88 +14,94 @@ function lf_is_image_url($url)
     return (is_string($type) && strpos($type, 'image/') === 0);
 }
 
-/**
- * Finds the best icon URL from a page's HTML and base URL.
- *
- * @param string $html      The HTML source of the page.
- * @param string $page_url  The original URL fetched (used for absolute paths).
- * @return string           The first valid image URL found, or empty string.
- */
-function lf_find_icon_url($html, $page_url)
+function lf_icon_exists_in_media_library($domain, $ext = '')
 {
-    $candidates = [];
+    // Search for an attachment named $domain.$ext (or any extension if $ext is blank)
+    $search = $domain . ($ext ? $ext : '');
+    $args = [
+        'post_type'      => 'attachment',
+        'posts_per_page' => 1,
+        'meta_query'     => [[
+            'key'     => '_wp_attached_file',
+            'value'   => $search,
+            'compare' => 'LIKE',
+        ]],
+    ];
+    $existing = get_posts($args);
+    if ($existing) {
+        return wp_get_attachment_url($existing[0]->ID);
+    }
+    return false;
+}
 
-    // 1. Parse all <link> tags for icon candidates (robust rel check)
+function lf_try_standard_icon_locations($scheme_host)
+{
+    $candidates = [
+        $scheme_host . '/favicon.ico',
+        $scheme_host . '/favicon.png',
+        $scheme_host . '/apple-touch-icon.png',
+        $scheme_host . '/apple-touch-icon-precomposed.png'
+    ];
+    foreach ($candidates as $url) {
+        if (lf_is_image_url($url)) return $url;
+    }
+    return false;
+}
+
+function lf_find_icon_links_in_html($html, $base_url)
+{
+    $icons = [];
     if (preg_match_all('/<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>/i', $html, $matches, PREG_SET_ORDER)) {
         foreach ($matches as $m) {
             $rel = strtolower($m[1]);
             $href = html_entity_decode($m[2]);
-            if (
-                strpos($rel, 'icon') !== false ||
-                strpos($rel, 'apple-touch-icon') !== false ||
-                strpos($rel, 'mask-icon') !== false ||
-                strpos($rel, 'fluid-icon') !== false ||
-                strpos($rel, 'alternate icon') !== false
-            ) {
-                // Protocol-relative (starts with //)
+            if (strpos($rel, 'icon') !== false) {
+                // Make absolute if necessary
                 if (strpos($href, '//') === 0) {
-                    $parsed = parse_url($page_url);
+                    $parsed = parse_url($base_url);
                     $href = $parsed['scheme'] . ':' . $href;
+                } elseif (strpos($href, 'http') !== 0) {
+                    $parts = parse_url($base_url);
+                    $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
                 }
-                // Relative (does not start with http/https)
-                elseif (strpos($href, 'http') !== 0) {
-                    $parts = parse_url($page_url);
-                    $base = $parts['scheme'] . '://' . $parts['host'];
-                    if (!empty($parts['port'])) $base .= ':' . $parts['port'];
-                    $href = $base . '/' . ltrim($href, '/');
-                }
-                $candidates[] = $href;
+                $icons[] = $href;
             }
         }
     }
+    return $icons;
+}
 
-    // 2. Fallback: /favicon.ico at subdomain and root
-    $parts = parse_url($page_url);
-    $scheme_host = $parts['scheme'] . '://' . $parts['host'];
-    $candidates[] = $scheme_host . '/favicon.ico';
-    // Try root (naked) domain if this is a subdomain
-    $domain_parts = explode('.', $parts['host']);
-    if (count($domain_parts) > 2) {
-        $root_domain = $domain_parts[count($domain_parts) - 2] . '.' . $domain_parts[count($domain_parts) - 1];
-        $candidates[] = $parts['scheme'] . '://' . $root_domain . '/favicon.ico';
-    }
-
-    // 3. Return the first valid image
-    foreach ($candidates as $icon_url) {
-        if (lf_is_image_url($icon_url)) {
+function lf_handle_discord_icon_case($html, $base_url)
+{
+    // Discord and some other apps use custom asset paths in their <link rel="icon">
+    // (You may wish to check if the base_url domain is discord.com, then prioritize .ico in /assets/)
+    $icons = lf_find_icon_links_in_html($html, $base_url);
+    foreach ($icons as $icon_url) {
+        if (preg_match('/discord\.com\/assets\/.+\.ico$/', $icon_url) && lf_is_image_url($icon_url)) {
             return $icon_url;
         }
     }
-    return '';
+    return false;
 }
 
 /**
- * Returns the icon media URL for a given icon, avoiding duplicates by domain.
+ * Download, rename, and sideload a favicon to the media library by domain.
  *
- * @param string $icon_url  The icon image URL.
- * @param string $page_url  The page URL (for extracting domain).
- * @return string           Attachment URL in media library, or '' on failure.
+ * @param string $icon_url The icon image URL (already checked for validity).
+ * @param string $domain   The domain or subdomain (for unique naming).
+ * @return string          The local media URL, or '' on failure.
  */
-function lf_sideload_icon_unique($icon_url, $page_url)
+function lf_sideload_and_store_icon($icon_url, $domain)
 {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/media.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
-    // 1. Extract domain for filename
-    $parts = parse_url($page_url);
-    $domain = $parts['host'] ?? 'site-icon';
-    $domain = preg_replace('/^www\./', '', strtolower($domain)); // remove 'www.'
-
-    // 2. Get the content type from HTTP headers
-    $head = wp_remote_head($icon_url);
+    // HEAD request to get Content-Type (not just extension)
+    $head = wp_remote_head($icon_url, ['timeout' => 8]);
     $type = strtolower(wp_remote_retrieve_header($head, 'content-type'));
-    $ext = '.ico'; // default fallback
+    $ext = '.ico'; // fallback
+
     if (strpos($type, 'png') !== false) $ext = '.png';
     elseif (strpos($type, 'jpeg') !== false) $ext = '.jpg';
     elseif (strpos($type, 'gif') !== false) $ext = '.gif';
@@ -105,42 +111,99 @@ function lf_sideload_icon_unique($icon_url, $page_url)
 
     $filename = $domain . $ext;
 
-    // 3. See if file already exists in Media Library
+    // Check if this icon already exists in the Media Library
     $existing = get_posts([
         'post_type' => 'attachment',
         'posts_per_page' => 1,
-        'meta_query' => [
-            [
-                'key' => '_wp_attached_file',
-                'value' => $filename,
-                'compare' => 'LIKE'
-            ]
-        ]
+        'meta_query' => [[
+            'key' => '_wp_attached_file',
+            'value' => $filename,
+            'compare' => 'LIKE',
+        ]],
     ]);
     if (!empty($existing)) {
         return wp_get_attachment_url($existing[0]->ID);
     }
 
-    // 4. Download and sideload new icon
+    // Download the file to temp
     $tmp = download_url($icon_url);
     if (is_wp_error($tmp)) {
         return '';
     }
+
     $file_array = [
         'name' => $filename,
         'tmp_name' => $tmp,
     ];
+
+    // Sideload into the Media Library (post_id = 0 for unattached)
     $attach_id = media_handle_sideload($file_array, 0, 'Site Icon for ' . $domain);
+
+    // Cleanup temp file
     @unlink($tmp);
+
     if (is_wp_error($attach_id)) {
         return '';
     }
+
     return wp_get_attachment_url($attach_id);
 }
 
-/**
- * Fetches page metadata: title and best icon (image) URL.
- */
+function lf_get_icon_for_url($page_url)
+{
+    $parts = parse_url($page_url);
+    $domain = strtolower($parts['host']);
+    $scheme_host = $parts['scheme'] . '://' . $domain;
+    $root_domain = lf_get_root_domain($domain);
+    $scheme_root = $parts['scheme'] . '://' . $root_domain;
+
+    // 1. Check if file exists locally (in Media Library)
+    foreach (['.png', '.ico', '.jpg', '.svg', '.gif', '.bmp', '.webp', ''] as $ext) {
+        $found = lf_icon_exists_in_media_library($domain, $ext);
+        if ($found) return $found;
+    }
+
+    // 2. Check static standard locations at full domain
+    $icon_url = lf_try_standard_icon_locations($scheme_host);
+    if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
+
+    // 3. Check static standard locations at root domain
+    if ($root_domain !== $domain) {
+        $icon_url = lf_try_standard_icon_locations($scheme_root);
+        if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
+    }
+
+    // 4. Fetch page HTML for further checks
+    $response = wp_remote_get($page_url, ['timeout' => 8]);
+    if (!is_wp_error($response) && !empty($response['body'])) {
+        $html = $response['body'];
+
+        // 5. Check Discord-style icon paths at full domain
+        $icon_url = lf_handle_discord_icon_case($html, $scheme_host);
+        if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
+
+        // 6. Check Discord-style icon paths at root domain
+        if ($root_domain !== $domain) {
+            $icon_url = lf_handle_discord_icon_case($html, $scheme_root);
+            if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
+        }
+
+        // 7. Check <link rel="icon"> in page HTML at full domain
+        foreach (lf_find_icon_links_in_html($html, $scheme_host) as $url) {
+            if (lf_is_image_url($url)) return lf_sideload_and_store_icon($url, $domain);
+        }
+
+        // 8. Check <link rel="icon"> in page HTML at root domain
+        if ($root_domain !== $domain) {
+            foreach (lf_find_icon_links_in_html($html, $scheme_root) as $url) {
+                if (lf_is_image_url($url)) return lf_sideload_and_store_icon($url, $root_domain);
+            }
+        }
+    }
+
+    return ''; // fallback, or your default icon
+}
+
 function lf_fetch_page_metadata($url)
 {
     $response = wp_remote_get($url, [
@@ -154,7 +217,7 @@ function lf_fetch_page_metadata($url)
         return [
             'title' => '',
             'icon_url' => '',
-            'status_code' => 499,
+            'status_code' => 0,
         ];
     }
 
@@ -167,12 +230,8 @@ function lf_fetch_page_metadata($url)
         $title = trim($m[1]);
     }
 
-    // Compute base URL
-    $parts = parse_url($url);
-    $base_url = $parts['scheme'] . '://' . $parts['host'];
-
     // Get best icon image URL
-    $icon_url = lf_sideload_icon_unique($html, $base_url);
+    $icon_url = lf_get_icon_for_url($url); // or $page_url as appropriate
 
     return [
         'title' => $title,
