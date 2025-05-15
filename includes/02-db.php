@@ -96,6 +96,27 @@ function lf_check_and_upgrade_schema()
     }
 }
 
+function lf_ensure_tables_exist()
+{
+    global $wpdb;
+    $tables = [
+        $wpdb->prefix . 'custom_links',
+        $wpdb->prefix . 'custom_link_post_map',
+        $wpdb->prefix . 'custom_link_categories'
+    ];
+    $need_create = false;
+    foreach ($tables as $table) {
+        // Use $wpdb->get_var("SHOW TABLES LIKE '$table'")
+        if (!$wpdb->get_var("SHOW TABLES LIKE '{$table}'")) {
+            $need_create = true;
+            break;
+        }
+    }
+    if ($need_create) {
+        lf_initialize_database(); // call your schema creation routine
+    }
+}
+
 register_activation_hook(__FILE__, 'lf_initialize_database');
 add_action('admin_init', 'lf_check_and_upgrade_schema');
 

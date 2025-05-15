@@ -33,6 +33,8 @@ add_action('admin_menu', function () {
     );
 }, 11);
 
+add_action('admin_init', 'lf_ensure_tables_exist');
+
 // Default Linkfolio "About" page
 function lf_render_linkfolio_page() {
     echo '<div class="wrap">';
@@ -53,4 +55,5 @@ function lf_render_linkfolio_page() {
     echo '<p style="margin-top:2em;color:#777;font-size:0.9em;">Plugin by <strong>Gretchen Maculo</strong>. Version 0.1.3</p>';
     echo '</div>';
     echo '</div>';
+
 }
