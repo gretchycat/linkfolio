@@ -17,33 +17,57 @@ function lf_is_image_url($url)
 /**
  * Find the best icon URL for a given page HTML + base URL.
  */
-function lf_find_icon_url($html, $base_url)
+function lf_find_icon_url($html, $page_url)
 {
     $candidates = [];
 
-    if (preg_match_all('~<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>~i', $html, $matches, PREG_SET_ORDER)) {
-        foreach ($matches as $m) {
-            $rel = strtolower($m[1]);
-            $href = html_entity_decode($m[2]);
-            if (strpos($rel, 'icon') !== false) {
-                // Convert relative to absolute
-                if (strpos($href, '//') === 0) {
-                    $parsed = parse_url($base_url);
-                    $href = $parsed['scheme'] . ':' . $href;
-                } elseif (strpos($href, 'http') !== 0) {
-                    // Make relative URL absolute
-                    $href = rtrim($base_url, '/') . '/' . ltrim($href, '/');
+    // 1. Parse all <link> tags for icon candidates
+    if (preg_match_all('/<link\s+([^>]+)>/i', $html, $matches)) {
+        foreach ($matches[1] as $attrs) {
+            // Match rel attribute
+            if (preg_match('/rel=["\']?([^"\'> ]+)["\']?/i', $attrs, $rel_match)) {
+                $rel = strtolower($rel_match[1]);
+                if (
+                    strpos($rel, 'icon') !== false ||
+                    strpos($rel, 'apple-touch-icon') !== false ||
+                    strpos($rel, 'mask-icon') !== false ||
+                    strpos($rel, 'fluid-icon') !== false ||
+                    strpos($rel, 'alternate icon') !== false
+                ) {
+                    // Find href
+                    if (preg_match('/href=["\']?([^"\'> ]+)["\']?/i', $attrs, $href_match)) {
+                        $href = html_entity_decode($href_match[1]);
+                        // Convert to absolute if necessary
+                        if (strpos($href, '//') === 0) {
+                            // Protocol-relative
+                            $parsed = parse_url($page_url);
+                            $href = $parsed['scheme'] . ':' . $href;
+                        } elseif (strpos($href, 'http') !== 0) {
+                            // Relative path
+                            $parts = parse_url($page_url);
+                            $base = $parts['scheme'] . '://' . $parts['host'];
+                            if (!empty($parts['port'])) $base .= ':' . $parts['port'];
+                            $href = $base . '/' . ltrim($href, '/');
+                        }
+                        $candidates[] = $href;
+                    }
                 }
-                $candidates[] = $href;
             }
         }
     }
 
-    // Always try the default favicon.ico as a fallback
-    $parts = parse_url($base_url);
+    // 2. Fallback: /favicon.ico at subdomain and root
+    $parts = parse_url($page_url);
     $scheme_host = $parts['scheme'] . '://' . $parts['host'];
     $candidates[] = $scheme_host . '/favicon.ico';
+    // Try root (naked) domain
+    $domain_parts = explode('.', $parts['host']);
+    if (count($domain_parts) > 2) {
+        $root_domain = $domain_parts[count($domain_parts) - 2] . '.' . $domain_parts[count($domain_parts) - 1];
+        $candidates[] = $parts['scheme'] . '://' . $root_domain . '/favicon.ico';
+    }
 
+    // 3. Return the first valid image
     foreach ($candidates as $icon_url) {
         if (lf_is_image_url($icon_url)) {
             return $icon_url;
