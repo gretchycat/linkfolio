@@ -21,25 +21,12 @@ function lf_find_icon_url($html, $base_url)
 {
     $candidates = [];
 
-    // 1. Find all <link rel=... href=...> for icons
-    if (preg_match_all(
-        '~<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>~i',
-        $html,
-        $matches,
-        PREG_SET_ORDER
-    )) {
+    if (preg_match_all('~<link\s+[^>]*rel=["\']?([^"\'> ]+)["\']?[^>]*href=["\']?([^"\'> ]+)["\']?[^>]*>~i', $html, $matches, PREG_SET_ORDER)) {
         foreach ($matches as $m) {
             $rel = strtolower($m[1]);
             $href = html_entity_decode($m[2]);
-            if (
-                strpos($rel, 'apple-touch-icon') !== false ||
-                strpos($rel, 'icon') !== false ||
-                strpos($rel, 'shortcut icon') !== false ||
-                strpos($rel, 'mask-icon') !== false ||
-                strpos($rel, 'fluid-icon') !== false ||
-                strpos($rel, 'alternate icon') !== false
-            ) {
-                // Absolute URL?
+            if (strpos($rel, 'icon') !== false) {
+                // Convert relative to absolute
                 if (strpos($href, '//') === 0) {
                     $parsed = parse_url($base_url);
                     $href = $parsed['scheme'] . ':' . $href;
@@ -52,18 +39,17 @@ function lf_find_icon_url($html, $base_url)
         }
     }
 
-    // 2. Add fallback to /favicon.ico
+    // Always try the default favicon.ico as a fallback
     $parts = parse_url($base_url);
     $scheme_host = $parts['scheme'] . '://' . $parts['host'];
     $candidates[] = $scheme_host . '/favicon.ico';
 
-    // 3. Return the first valid image
     foreach ($candidates as $icon_url) {
         if (lf_is_image_url($icon_url)) {
             return $icon_url;
         }
     }
-    return ''; // No valid icon found
+    return '';
 }
 
 /**
