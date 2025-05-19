@@ -29,6 +29,7 @@ function lf_render_link_row_editor($link) {
     echo '<div class="lf-link-top">';
     echo '<div class="lf-icon-wrapper" onclick="openMediaSelector(\'' . $icon_id . '\')">';
     echo '<img id="' . $icon_id . '_preview" src="' . ($icon_url ?: $placeholder) . '" alt="icon preview" width=64 height=64>';
+    echo '<label class="lf-link-label">Clear Icon: <input type="checkbox" name="clear_icon_' . $id . '"' .  '></label>';
     echo '</div>';
     echo '<input type="hidden" name="' . $icon_id . '" id="' . $icon_id . '" value="' . $icon_url . '">';
     echo '<input type="hidden" name="' . "status_code_$id" . '"" value="' . $link->status_code . '">';
