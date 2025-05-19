@@ -192,6 +192,7 @@ function lf_save_link($data, $id = null) {
     if (!empty($url))
     {
         $fetched = lf_fetch_page_metadata($url);
+error_log("Label pre: '{$data['label']}', Fetched title: '{$fetched['title']}', Fetched status: '{$fetched['status_code']}'");
         if (empty($manual_icon) && !empty($fetched['icon_url']))
         {
             $manual_icon = $fetched['icon_url'];
@@ -215,9 +216,12 @@ function lf_save_link($data, $id = null) {
         'status_code' => is_numeric($status_code) ? (int)$status_code : null,
     ];
 
-    if ($id && is_numeric($id)) {
+    if ($id && is_numeric($id))
+    {
         return $wpdb->update($table, $payload, ['id' => (int)$id]);
-    } else {
+    }
+    else
+    {
         return $wpdb->insert($table, $payload);
     }
 }
