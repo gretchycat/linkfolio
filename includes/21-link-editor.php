@@ -35,7 +35,7 @@ function lf_render_link_row_editor($link) {
     echo '<label class="lf-label">Label:&nbsp;<input type="text" name="label_' . $id . '" value="' . esc_attr($link->label) . '" maxlength="100" size="10" class="lf-input-short"></label>';
     echo '&nbsp;<label class="lf-label">Category:&nbsp;<select name="category_' . $id . '" class="lf-select">';
     foreach ($categories as $cat) {
-        $selected = ($cat->slug === $link->category_slug ?? '') ? 'selected' : '';
+        $selected = ($cat->slug === $link->category ?? '') ? 'selected' : '';
         echo '<option value="' . esc_attr($cat->slug) . '" ' . $selected . '>' . esc_html($cat->name) . '</option>';
     }
     echo '</select></label>';
