@@ -189,16 +189,19 @@ function lf_save_link($data, $id = null) {
     $url = $data['url'] ?? '';
     $status_code = $data['status_code'] ?? 404;
 
-    if ((empty($manual_icon) || empty($data['label']) || $data['status_code']>=400) && !empty($url))
+    if (!empty($url))
     {
         $fetched = lf_fetch_page_metadata($url);
-        if (empty($manual_icon) && !empty($fetched['icon_url'])) {
+        if (empty($manual_icon) && !empty($fetched['icon_url']))
+        {
             $manual_icon = $fetched['icon_url'];
         }
-        if (empty($data['label']) && !empty($fetched['title'])) {
+        if (empty($data['label']) && !empty($fetched['title']))
+        {
             $data['label'] = $fetched['title'];
         }
-        if (isset($fetched['status_code'])) {
+        if (isset($fetched['status_code']))
+        {
             $status_code = (int)$fetched['status_code'];
         }
     }
