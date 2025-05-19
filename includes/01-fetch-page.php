@@ -149,7 +149,7 @@ function lf_sideload_and_store_icon($icon_url, $domain)
     // Download the file to temp
     $tmp = download_url($icon_url);
     if (is_wp_error($tmp)) {
-        return '';
+        return $icon_url;
     }
 
     $file_array = [
