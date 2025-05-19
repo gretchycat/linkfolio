@@ -15,9 +15,9 @@ function lf_initialize_database()
 
     $charset_collate = $wpdb->get_charset_collate();
     $prefix = $wpdb->prefix;
-    $categories_table = $prefix . 'custom_link_categories';
-    $links_table = $prefix . 'custom_links';
-    $assoc_table = $prefix . 'custom_link_post_map';
+    $categories_table = $prefix . 'linkfolio_link_categories';
+    $links_table = $prefix . 'linkfolio_links';
+    $assoc_table = $prefix . 'linkfolio_link_post_map';
 
     $sql_categories = "CREATE TABLE $categories_table (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -115,9 +115,9 @@ function lf_ensure_tables_exist()
 {
     global $wpdb;
     $tables = [
-        $wpdb->prefix . 'custom_links',
-        $wpdb->prefix . 'custom_link_post_map',
-        $wpdb->prefix . 'custom_link_categories'
+        $wpdb->prefix . 'linkfolio_links',
+        $wpdb->prefix . 'linkfolio_link_post_map',
+        $wpdb->prefix . 'linkfolio_link_categories'
     ];
     $need_create = false;
     foreach ($tables as $table) {
@@ -135,8 +135,8 @@ function lf_ensure_tables_exist()
 function lf_prune_orphaned_link_associations()
 {
     global $wpdb;
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    $links_table = $wpdb->prefix . 'custom_links';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
 
     // Delete associations where link_id no longer exists
     $wpdb->query("
@@ -149,7 +149,7 @@ function lf_prune_orphaned_link_associations()
 function lf_prune_orphaned_post_associations()
 {
     global $wpdb;
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
     $posts_table = $wpdb->prefix . 'posts';
 
     // Delete associations where post_id no longer exists
@@ -165,13 +165,13 @@ add_action('admin_init', 'lf_check_and_upgrade_schema');
 
 function lf_get_all_categories() {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_link_categories';
+    $table = $wpdb->prefix . 'linkfolio_link_categories';
     return $wpdb->get_results("SELECT * FROM $table ORDER BY name ASC");
 }
 
 function lf_save_category($data, $id = null) {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_link_categories';
+    $table = $wpdb->prefix . 'linkfolio_link_categories';
     $payload = [
         'name' => sanitize_text_field($data['name'] ?? ''),
         'slug' => sanitize_title($data['name'] ?? ''),
@@ -191,13 +191,13 @@ function lf_save_category($data, $id = null) {
 
 function lf_delete_category($id) {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_link_categories';
+    $table = $wpdb->prefix . 'linkfolio_link_categories';
     return $wpdb->delete($table, ['id' => (int)$id]);
 }
 
 function lf_save_link($data, $id = null) {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_links';
+    $table = $wpdb->prefix . 'linkfolio_links';
     // Ensure the 'status_code' column exists
 
     $manual_icon = $data['icon_url'] ?? '';
@@ -242,6 +242,6 @@ function lf_save_link($data, $id = null) {
 
 function lf_delete_link($id) {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_links';
+    $table = $wpdb->prefix . 'linkfolio_links';
     return $wpdb->delete($table, ['id' => (int)$id]);
 }
