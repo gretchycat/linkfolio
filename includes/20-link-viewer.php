@@ -22,7 +22,7 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
     {
         echo '<div id="link_'.$id.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
         // icon block
-        echo '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;background:#222;text-align:center;line-height:64px">';
+        echo '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
         if ($icon_url)
         {
             echo '<img src="' . $icon_url . '" style="width:64px;height:64px;object-fit:cover;vertical-align:middle" alt="icon">';
