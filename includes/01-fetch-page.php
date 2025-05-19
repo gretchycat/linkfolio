@@ -43,7 +43,8 @@ function lf_try_standard_icon_locations($scheme_host)
         $scheme_host . '/apple-touch-icon.png',
         $scheme_host . '/apple-touch-icon-precomposed.png'
     ];
-    foreach ($candidates as $url) {
+    foreach ($candidates as $url)
+    {
         if (lf_is_image_url($url)) return $url;
     }
     return false;
@@ -60,27 +61,31 @@ function lf_try_standard_icon_locations($scheme_host)
 function lf_find_icon_links_in_html($html, $base_url)
 {
     $icons = [];
-
     // 1. Grab all <link ...> tags
-    if (!preg_match_all('/<link\s[^>]*>/i', $html, $matches)) {
+    if (!preg_match_all('/<link\s[^>]*>/i', $html, $matches)) 
+    {
         return [];
     }
-
-    foreach ($matches[0] as $tag) {
+    foreach ($matches[0] as $tag) 
+    {
         // 2. Parse each tag's attributes
         $dom = new DOMDocument();
         @$dom->loadHTML('<html><head>' . $tag . '</head></html>'); // Suppress errors for bad HTML
-
         $links = $dom->getElementsByTagName('link');
-        foreach ($links as $link) {
+        foreach ($links as $link) 
+        {
             $rel = $link->getAttribute('rel');
             $href = $link->getAttribute('href');
-            if ($rel && stripos($rel, 'icon') !== false && $href) {
+            if ($rel && stripos($rel, 'icon') !== false && $href) 
+            {
                 // Normalize to absolute URL if necessary
-                if (strpos($href, '//') === 0) {
+                if (strpos($href, '//') === 0) 
+                {
                     $parsed = parse_url($base_url);
                     $href = $parsed['scheme'] . ':' . $href;
-                } elseif (strpos($href, 'http') !== 0) {
+                } 
+                elseif (strpos($href, 'http') !== 0) 
+                {
                     $parts = parse_url($base_url);
                     $href = $parts['scheme'] . '://' . $parts['host'] . '/' . ltrim($href, '/');
                 }
@@ -88,7 +93,6 @@ function lf_find_icon_links_in_html($html, $base_url)
             }
         }
     }
-
     return $icons;
 }
 
@@ -184,8 +188,6 @@ function lf_get_icon_for_url($page_url)
     $parts = parse_url($page_url);
     $domain = strtolower($parts['host']);
     $scheme_host = $parts['scheme'] . '://' . $domain;
-    $root_domain = lf_get_root_domain($domain);
-    $scheme_root = $parts['scheme'] . '://' . $root_domain;
 
     // 1. Check if file exists locally (in Media Library)
     foreach (['.png', '.ico', '.jpg', '.svg', '.gif', '.bmp', '.webp', ''] as $ext) {
@@ -193,46 +195,22 @@ function lf_get_icon_for_url($page_url)
         if ($found) return $found;
     }
 
-    // 2. Check static standard locations at full domain
-    $icon_url = lf_try_standard_icon_locations($scheme_host);
-    if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
-
-    // 3. Check static standard locations at root domain
-    if ($root_domain !== $domain) 
-    {
-        $icon_url = lf_try_standard_icon_locations($scheme_root);
-        if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
-    }
-
     // 4. Fetch page HTML for further checks
     $response = wp_remote_get($page_url, ['timeout' => 8]);
     if (!is_wp_error($response) && !empty($response['body'])) 
     {
         $html = $response['body'];
-
         // 5. Check Discord-style icon paths at full domain
         $icon_url = lf_handle_discord_icon_case($html, $scheme_host);
         if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
-
-        // 6. Check Discord-style icon paths at root domain
-        if ($root_domain !== $domain) 
-        {
-            $icon_url = lf_handle_discord_icon_case($html, $scheme_root);
-            if ($icon_url) return lf_sideload_and_store_icon($icon_url, $root_domain);
-        }
-
         // 7. Check <link rel="icon"> in page HTML at full domain
         foreach (lf_find_icon_links_in_html($html, $scheme_host) as $url) {
             if (lf_is_image_url($url)) return lf_sideload_and_store_icon($url, $domain);
         }
-
-        // 8. Check <link rel="icon"> in page HTML at root domain
-        if ($root_domain !== $domain) {
-            foreach (lf_find_icon_links_in_html($html, $scheme_root) as $url) {
-                if (lf_is_image_url($url)) return lf_sideload_and_store_icon($url, $root_domain);
-            }
-        }
     }
+    // 2. Check static standard locations at full domain
+    $icon_url = lf_try_standard_icon_locations($scheme_host);
+    if ($icon_url) return lf_sideload_and_store_icon($icon_url, $domain);
 
     return ''; // fallback, or your default icon
 }
