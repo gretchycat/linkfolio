@@ -226,7 +226,7 @@ function lf_save_link($data, $id = null) {
         'url' => esc_url_raw($url),
         'icon_url' => esc_url_raw($manual_icon),
         'description' => sanitize_textarea_field($data['description'] ?? ''),
-        'category_slug' => sanitize_title($data['category'] ?? ''),
+        'category_slug' => sanitize_title($data['category_slug'] ?? 'uncategorized'),
         'status_code' => is_numeric($status_code) ? (int)$status_code : null,
     ];
 
