@@ -196,8 +196,17 @@ function lf_get_icon_for_url($page_url)
     }
 
     // 4. Fetch page HTML for further checks
+    $success=false;
     $response = wp_remote_get($page_url, ['timeout' => 8]);
-    if (!is_wp_error($response) && !empty($response['body'])) 
+    if (is_wp_error($response) && !empty($response['body']))
+    {
+        $response = wp_remote_get($schema_host, ['timeout' => 8]);
+        if (!is_wp_error($response) && !empty($response['body']))
+            $success=true;
+    }
+    else
+        $success=true;
+    if ($success)
     {
         $html = $response['body'];
         // 5. Check Discord-style icon paths at full domain
