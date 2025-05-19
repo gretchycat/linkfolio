@@ -7,9 +7,9 @@ function lf_render_link_meta_box($post)
 {
     global $wpdb;
     $post_id = $post->ID;
-    $links_table = $wpdb->prefix . 'custom_links';
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    $table = $wpdb->prefix . 'custom_links';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
+    $table = $wpdb->prefix . 'linkfolio_links';
     $selected_links = $wpdb->get_col($wpdb->prepare("SELECT link_id FROM $assoc_table WHERE post_id = %d", $post_id));
 
     echo '<div style="font-size:14px">';
@@ -61,7 +61,7 @@ function lf_save_link_meta_box($post_id)
     if (!current_user_can('edit_post', $post_id)) return;
 
     global $wpdb;
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
     $wpdb->delete($assoc_table, ['post_id' => $post_id]);
 
     if (!empty($_POST['lf_links']) && is_array($_POST['lf_links']))

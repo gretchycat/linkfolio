@@ -16,7 +16,7 @@ function lf_render_link_row_editor($link) {
     $save_name = $is_new ? 'save_link_new' : "save_link_$id";
     $cancel_name = $is_new ? 'cancel_link_new' : "cancel_link_$id";
 
-    $cat_table = $wpdb->prefix . 'custom_link_categories';
+    $cat_table = $wpdb->prefix . 'linkfolio_link_categories';
     $categories = $wpdb->get_results("SELECT slug, name FROM $cat_table ORDER BY name ASC");
 
     $icon_id = "icon_$id";

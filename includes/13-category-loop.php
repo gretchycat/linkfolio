@@ -4,7 +4,7 @@ defined('ABSPATH') || exit;
 
 function lf_render_all_categories() {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_link_categories';
+    $table = $wpdb->prefix . 'linkfolio_link_categories';
 
     $pinned = ['uncategorized', 'social', 'references'];
     $rows = $wpdb->get_results("SELECT * FROM $table ORDER BY name ASC");

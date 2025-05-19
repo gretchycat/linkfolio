@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 function lf_rescan_broken_links()
 {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_links';
+    $table = $wpdb->prefix . 'linkfolio_links';
 
     // Get all broken links attached to this post/page
     $broken_links = $wpdb->get_results( "SELECT * FROM $table WHERE status_code BETWEEN 400 AND 499");

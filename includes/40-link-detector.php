@@ -18,8 +18,8 @@ function lf_detect_links_in_post($post_id, $post)
     $skipped = 0;
 
     global $wpdb;
-    $links_table = $wpdb->prefix . 'custom_links';
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
 
     foreach ($matches as $m)
     {

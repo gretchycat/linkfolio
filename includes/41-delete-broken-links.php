@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 function lf_delete_broken_links()
 {
     global $wpdb;
-    $table = $wpdb->prefix . 'custom_links';
+    $table = $wpdb->prefix . 'linkfolio_links';
 
     $broken_links = $wpdb->get_results("SELECT * FROM $table WHERE status_code BETWEEN 400 AND 499");
     if (empty($broken_links)) return;
@@ -41,8 +41,8 @@ function lf_delete_broken_links()
 function lf_delete_broken_link($url, &$post_cache = [])
 {
     global $wpdb;
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
-    $links_table = $wpdb->prefix . 'custom_links';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
 
     $url = esc_url_raw($url);
     $link_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM $links_table WHERE url = %s", $url));

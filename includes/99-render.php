@@ -14,9 +14,9 @@ add_filter('the_content', function ($content) {
 
 function lf_render_links_for_post($post_id) {
     global $wpdb;
-    $cat_table = $wpdb->prefix . 'custom_link_categories';
-    $link_table = $wpdb->prefix . 'custom_links';
-    $assoc_table = $wpdb->prefix . 'custom_link_post_map';
+    $cat_table = $wpdb->prefix . 'linkfolio_link_categories';
+    $link_table = $wpdb->prefix . 'linkfolio_links';
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
 
     $link_ids = $wpdb->get_col($wpdb->prepare(
         "SELECT link_id FROM $assoc_table WHERE post_id = %d",
