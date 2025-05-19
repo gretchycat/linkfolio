@@ -93,13 +93,13 @@ function lf_render_link_settings_page()
     echo '<h2 style="color:#33d">New Link</h2>';
 
     $newlink = (object)[
-        'id'          => 'new',
-        'label'       => '',
-        'url'         => '',
-        'icon_url'    => '',
-        'description' => '',
-        'category'    => '',
-        'status_code' => 404,
+        'id'           => 'new',
+        'label'        => '',
+        'url'          => '',
+        'icon_url'     => '',
+        'description'  => '',
+        'category_slug'=> '',
+        'status_code'  => 404,
     ];
     lf_render_link_row_editor($newlink);
     echo '</div>';
