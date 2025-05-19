@@ -57,6 +57,22 @@ function lf_initialize_database()
     dbDelta($sql_categories);
     dbDelta($sql_links);
     dbDelta($sql_assoc);
+    $required_slugs = ['uncategorized', 'social', 'references'];
+    $missing_required = false;
+
+    foreach ($required_slugs as $slug) {
+        $exists = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM $categories_table WHERE slug = %s", $slug
+        ));
+        if (!$exists) {
+            $missing_required = true;
+            break;
+        }
+    }
+
+    if ($missing_required) {
+        update_option('linkfolio_first_run', 'yes');
+    }
 
     if (!get_option('linkfolio_first_run')) {
         add_option('linkfolio_first_run', 'yes');
