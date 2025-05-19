@@ -25,7 +25,7 @@ function lf_render_link_row_view($link, $include_edit = true, $show_broken = tru
         echo '<div class="lf-link-icon" style="flex-shrink:0;width:96px;height:96px;overflow:hidden;border-radius:8px;background:#222;text-align:center;line-height:96px">';
         if ($icon_url)
         {
-            echo '<img src="' . $icon_url . '" style="max-width:96px;max-height:96px;object-fit:cover;vertical-align:middle" alt="icon">';
+            echo '<img src="' . $icon_url . '" style="width:64px;height:64px;object-fit:cover;vertical-align:middle" alt="icon">';
         } else
         {
             echo '<span style="color:#777;font-size:12px">no icon</span>';

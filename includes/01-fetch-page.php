@@ -164,7 +164,7 @@ function lf_sideload_and_store_icon($icon_url, $domain)
     @unlink($tmp);
 
     if (is_wp_error($attach_id)) {
-        return '';
+        return $icon_url;
     }
 
     return wp_get_attachment_url($attach_id);
