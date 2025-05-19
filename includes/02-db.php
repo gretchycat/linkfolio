@@ -60,21 +60,20 @@ function lf_initialize_database()
     $required_slugs = ['uncategorized', 'social', 'references'];
     $missing_required = false;
 
-    foreach ($required_slugs as $slug) {
+    foreach ($required_slugs as $slug)
+    {
         $exists = $wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) FROM $categories_table WHERE slug = %s", $slug
         ));
-        if (!$exists) {
+        if (!$exists)
+        {
             $missing_required = true;
             break;
         }
     }
 
-    if ($missing_required) {
-        update_option('linkfolio_first_run', 'yes');
-    }
-
-    if (!get_option('linkfolio_first_run')) {
+    if (!get_option('linkfolio_first_run') || $missing_required)
+    {
         add_option('linkfolio_first_run', 'yes');
         $defaults = [
             ['Uncategorized', 'uncategorized', 0],
