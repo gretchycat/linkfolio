@@ -35,7 +35,7 @@ function lf_render_link_settings_page()
                 'url' => $_POST["url_$id"] ?? '',
                 'icon_url' => $_POST["icon_$id"] ?? '',
                 'description' => $_POST["desc_$id"] ?? '',
-                'category' => $_POST["category_$id"] ?? '',
+                'category_slug' => $_POST["category_$id"] ?? '',
                 'status_code' => $_POST["status_code_$id"] ?? '404',
             ], $id === 'new' ? null : $id);
             $_POST["saved_link_$id"] = true;
