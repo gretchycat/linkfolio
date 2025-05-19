@@ -192,7 +192,6 @@ function lf_save_link($data, $id = null) {
     if (!empty($url))
     {
         $fetched = lf_fetch_page_metadata($url);
-error_log("Label pre: '{$data['label']}', Fetched title: '{$fetched['title']}', Fetched status: '{$fetched['status_code']}'");
         if (empty($manual_icon) && !empty($fetched['icon_url']))
         {
             $manual_icon = $fetched['icon_url'];
