@@ -1,7 +1,7 @@
 <?php
 // 05-settings.php
 defined('ABSPATH') || exit;
-
+require_once plugin_dir_path(__FILE__) . 'includes/lib/Parsedown/Parsedown.php';
 // Add main Linkfolio admin menu with subpages
 add_action('admin_menu', function () {
     add_menu_page(
@@ -40,24 +40,14 @@ add_action('admin_init', function() {
 });
 
 // Default Linkfolio "About" page
-function lf_render_linkfolio_page() {
-    echo '<div class="wrap">';
-    echo '<h1>Linkfolio</h1>';
-    echo '<div class="lf-about-tab" style="background: rgba(0,0,0,0.05); padding: 1em; border-radius: 6px;">';
-    echo '<h2>About Linkfolio</h2>';
-    echo '<p><strong>Linkfolio</strong> is a lightweight, privacy-conscious WordPress plugin for managing curated links and displaying them cleanly on your posts or pages.</p>';
-    echo '<ul style="list-style: disc; padding-left: 1.5em;">';
-    echo '<li>Auto-detects links in post/page content</li>';
-    echo '<li>Fetches icons and page titles automatically</li>';
-    echo '<li>Groups links using customizable categories</li>';
-    echo '<li>Tracks and reports broken (4xx) links</li>';
-    echo '<li>Lets you assign links per page or post</li>';
-    echo '</ul>';
-    echo '<p>Use the sidebar menu to manage <strong>Links</strong>, <strong>Categories</strong>, and <strong>Broken Links</strong>.</p>';
-    echo '<a href="/wp-admin/admin.php?page=linkfolio-edit-links">edit links</a>&nbsp;' ;
-    echo '<a href="/wp-admin/admin.php?page=linkfolio-edit-categories">edit categories</a>&nbsp;';
-    echo '<p style="margin-top:2em;color:#777;font-size:0.9em;">Plugin by <strong>Gretchen Maculo</strong>. Version 0.1.3</p>';
-    echo '</div>';
-    echo '</div>';
+function lf_render_linkfolio_page() 
+{
+    $parsedown = new Parsedown();
+    $about_file = plugin_dir_path(__DIR__) . 'docs/about.md';
+    $admin_links_file = plugin_dir_path(__DIR__) . 'docs/admin-links.md';
+    $instructions_file = plugin_dir_path(__DIR__) . 'docs/instructionsc.md';
+    echo $parsedown->text(file_get_contents($about_file));
+    echo $parsedown->text(file_get_contents($admin_links_file));
+    echo $parsedown->text(file_get_contents($instructions_file));
 
 }
