@@ -204,7 +204,7 @@ function lf_save_link($data, $id = null) {
     $url = $data['url'] ?? '';
     $status_code = $data['status_code'] ?? 404;
 
-    if (!empty($url))
+    if (!empty($url) && $status_code != 299)
     {
         $fetched = lf_fetch_page_metadata($url);
         if (empty($manual_icon) && !empty($fetched['icon_url']))
@@ -220,7 +220,8 @@ function lf_save_link($data, $id = null) {
             $status_code = (int)$fetched['status_code'];
         }
     }
-
+    if ($data['clear_icon'])
+        $manual_icon='';
     $payload = [
         'label' => sanitize_text_field($data['label'] ?? ''),
         'url' => esc_url_raw($url),
