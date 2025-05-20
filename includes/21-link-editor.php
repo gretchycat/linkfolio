@@ -31,7 +31,7 @@ function lf_render_link_row_editor($link) {
     echo '<img id="' . $icon_id . '_preview" src="' . ($icon_url ?: $placeholder) . '" alt="icon preview" width=64 height=64>';
     echo '</div>';
     echo '<label class="lf-link-label">Clear Icon: <input type="checkbox" name="clear_icon_' . $id . '"' .  '></label> ';
-    echo '<label class="lf-link-label">Force Valid: <input type="checkbox" name="force_valid_' . $id . '" ' . ($link->statuss_code==299 ? ' checked' : '') . '></label><br/>';
+    echo '<label class="lf-link-label">Force Valid: <input type="checkbox" name="force_valid_' . $id . '" ' . ($link->status_code==299 ? ' checked' : '') . '></label><br/>';
     echo '<input type="hidden" name="' . $icon_id . '" id="' . $icon_id . '" value="' . $icon_url . '">';
     echo '<input type="hidden" name="' . "status_code_$id" . '"" value="' . $link->status_code . '">';
     echo '<label class="lf-label">Label:&nbsp;<input type="text" name="label_' . $id . '" value="' . esc_attr($link->label) . '" maxlength="100" size="10" class="lf-input-short"></label>';
