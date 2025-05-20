@@ -30,13 +30,17 @@ function lf_render_link_settings_page()
         if (preg_match('/^save_link_(\d+)$/', $key, $m) || $key === 'save_link_new')
         {
             $id = $m[1] ?? 'new';
+            $status_code= $_POST["status_code_$id"] ?? '404';
+            if (isset($_POST["force_valid_$id"]))
+                $status_code='299':
             lf_save_link([
                 'label' => $_POST["label_$id"] ?? '',
                 'url' => $_POST["url_$id"] ?? '',
                 'icon_url' => $_POST["icon_$id"] ?? '',
                 'description' => $_POST["desc_$id"] ?? '',
                 'category_slug' => $_POST["category_$id"] ?? 'uncategorized',
-                'status_code' => $_POST["status_code_$id"] ?? '404',
+                'status_code' => $status_code,
+                'clear_icon' => isset($_POST["clear_icon_$id"]),
             ], $id === 'new' ? null : $id);
             $_POST["saved_link_$id"] = true;
         }
