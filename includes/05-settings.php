@@ -40,12 +40,14 @@ add_action('admin_init', function() {
 });
 
 // Default Linkfolio "About" page
-function lf_render_linkfolio_page() 
+function lf_render_linkfolio_page()
 {
     $parsedown = new Parsedown();
-    $about_file = plugin_dir_path(__DIR__) . '../docs/about.md';
-    $admin_links_file = plugin_dir_path(__DIR__) . '../docs/admin-links.md';
-    $instructions_file = plugin_dir_path(__DIR__) . '../docs/instructionsc.md';
+    $base= plugin_dir_path(__DIR__) . '/docs/';
+    $about_file = $base.'about.md';
+    $admin_links_file = $base.'admin-links.md';
+    $instructions_file = $base.'instructionsc.md';
+    echo $about_file;
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
