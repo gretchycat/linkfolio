@@ -33,6 +33,8 @@ function lf_render_link_settings_page()
             $status_code= $_POST["status_code_$id"] ?? '404';
             if (isset($_POST["force_valid_$id"]))
                 $status_code='299';
+            else
+                $status_code="290";
             lf_save_link([
                 'label' => $_POST["label_$id"] ?? '',
                 'url' => $_POST["url_$id"] ?? '',
