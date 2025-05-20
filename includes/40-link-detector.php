@@ -46,7 +46,7 @@ function lf_detect_links_in_post($post_id, $post)
             $details = lf_fetch_page_metadata($url);
             $label = !empty($details['title']) ? $details['title'] : ($label ?: $url);
             $icon = $details['icon_url'] ?? '';
-            $code = $details['status_code'] ?? 399;
+            $code = $details['status_code'] ?? 499;
             // Insert new link
             $wpdb->insert($links_table, [
                 'label'         => $label,
