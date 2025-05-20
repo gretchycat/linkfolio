@@ -1,7 +1,7 @@
 <?php
 // 05-settings.php
 defined('ABSPATH') || exit;
-require_once plugin_dir_path(__FILE__) . 'includes/lib/Parsedown/Parsedown.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Parsedown/Parsedown.php';
 // Add main Linkfolio admin menu with subpages
 add_action('admin_menu', function () {
     add_menu_page(
@@ -43,9 +43,9 @@ add_action('admin_init', function() {
 function lf_render_linkfolio_page() 
 {
     $parsedown = new Parsedown();
-    $about_file = plugin_dir_path(__DIR__) . 'docs/about.md';
-    $admin_links_file = plugin_dir_path(__DIR__) . 'docs/admin-links.md';
-    $instructions_file = plugin_dir_path(__DIR__) . 'docs/instructionsc.md';
+    $about_file = plugin_dir_path(__DIR__) . '../docs/about.md';
+    $admin_links_file = plugin_dir_path(__DIR__) . '../docs/admin-links.md';
+    $instructions_file = plugin_dir_path(__DIR__) . '../docs/instructionsc.md';
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
