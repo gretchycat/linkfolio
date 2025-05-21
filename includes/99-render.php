@@ -131,22 +131,20 @@ function lf_render_links_for_post($post_id)
         $out .= '<h3 class="linkfolio-category-heading">' . esc_html($cat_name) . '</h3>';
         if ($layout === 'horizontal') 
         {
-            //$out .= '<div class="linkfolio-row">';
             $out .= '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
             $count = count($cat_links);
             foreach ($cat_links as $i => $link) {
                 $out .= lf_render_link_horizontal($link, $cat);
-                if ($i < $count - 1 && !empty($cat->separator)) {
+                if ($i < $count - 1 && !empty($cat->separator)) 
+                {
                     $out .= esc_html($cat->separator);
                 }
             }
             $out .= '</div>';
         } else {
-            $out .= '<ul class="linkfolio-column">';
             foreach ($cat_links as $link) {
                 $out .= lf_render_link_vertical($link, $cat);
             }
-            $out .= '</ul>';
         }
     }
     return $out;
@@ -172,40 +170,24 @@ function lf_render_links_for_category($category_slug)
 
     $out = '<h3 class="linkfolio-category-heading">' . esc_html($cat->name) . '</h3>';
     if ($cat->layout === 'horizontal') {
-        //$out .= '<div class="linkfolio-row">';
         $out .= '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
         $count = count($links);
         foreach ($links as $i => $link) {
             $out .= lf_render_link_horizontal($link, $cat);
-            if ($i < $count - 1 && !empty($cat->separator)) {
+            if ($i < $count - 1 && !empty($cat->separator))
+            {
                 $out .= esc_html($cat->separator);
             }
         }
         $out .= '</div>';
-    } else {
-        $out .= '<ul class="linkfolio-column">';
-        foreach ($links as $link) {
+    } 
+    else 
+    {
+        foreach ($links as $link) 
+        {
             $out .= lf_render_link_vertical($link, $cat);
         }
-        $out .= '</ul>';
     }
     return $out;
 }
 
-       if ($cat->layout === 'horizontal') {
-            echo '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
-            foreach ($links_in_cat as $link) {
-                echo '<div style="text-align:center;">';
-                if (!empty($cat->show_icon) && !empty($link->icon_url)) {
-                    echo '<img src="' . esc_url($link->icon_url) . '" alt="" style="width:48px;height:48px;"><br>';
-                }
-                echo '<strong><a href="' . esc_url($link->url) . '" target="_blank">' . esc_html($link->label) . '</a></strong>';
-                if (!empty($cat->show_url)) {
-                    echo '<div style="font-size:0.85em;">(' . esc_html($link->url) . ')</div>';
-                }
-                if (!empty($cat->show_description) && $link->description) {
-                    echo '<div style="font-size:0.85em;">' . esc_html($link->description) . '</div>';
-                }
-                echo '</div>';
-            }
-        }
