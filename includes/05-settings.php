@@ -65,6 +65,5 @@ function lf_render_linkfolio_page()
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
     echo '</div>';
-    echo '<ul style="list-style-type:disc; margin-left:2em;"><li>Test</li></ul>';
 
 }
