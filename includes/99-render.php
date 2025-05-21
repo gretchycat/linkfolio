@@ -14,22 +14,16 @@ add_filter('the_content', function ($content) {
 
 function lf_prepare_link_display($link, $category)
 {
-    // Label: prefer label, else fallback to domain from URL
     $label = trim($link->label);
     if ($label === '') {
-        // Fallback: show domain only
         $host = parse_url($link->url, PHP_URL_HOST);
         $label = $host ?: $link->url;
     }
-
-    // Display URL: truncated for display, raw for href
     $display_url = $link->url;
     $maxlen = 20;
     if (mb_strlen($display_url) > $maxlen) {
         $display_url = mb_substr($display_url, 0, $maxlen) . '…';
     }
-
-    // Only pass through *values*; do not generate HTML
     return [
         'icon_url'     => (!empty($category->show_icon) && !empty($link->icon_url)) ? $link->icon_url : '',
         'label'        => $label,
@@ -39,19 +33,19 @@ function lf_prepare_link_display($link, $category)
     ];
 }
 
+// Each horizontal link block: icon + label inside a box
 function lf_render_link_horizontal($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
-    $out = '<span class="linkfolio-link linkfolio-horizontal">';
+    $out = '<div class="lf-link-horizontal-item">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
-    $out .= '<div class="lf-link-horizontal" style="text-align:center;">';
     if ($d['icon_url']) {
-        $out .='<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" style="height:3em;width:3em;vertical-align:middle;"><br/>';
+        $out .='<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-link-horizontal-icon"><br/>';
     }
-    $out .= esc_html($d['label']);
+    $out .= '<span class="lf-label">' . esc_html($d['label']) . '</span>';
     $out .= '</a>';
-    $out .= '</span>';
+    $out .= '</div>';
     return $out;
 }
 
@@ -80,6 +74,7 @@ function lf_render_link_vertical($link, $category)
     return $out;
 }
 
+// --- MAIN: Render all links for a post, grouped by category ---
 function lf_render_links_for_post($post_id)
 {
     global $wpdb;
@@ -87,20 +82,17 @@ function lf_render_links_for_post($post_id)
     $links_table = $wpdb->prefix . 'linkfolio_links';
     $cat_table   = $wpdb->prefix . 'linkfolio_link_categories';
 
-    // Get all link IDs for this post
     $link_ids = $wpdb->get_col($wpdb->prepare(
         "SELECT link_id FROM $assoc_table WHERE post_id = %d", $post_id
     ));
     if (empty($link_ids)) return '';
 
-    // Fetch links, ordered by category then id
     $placeholders = implode(',', array_fill(0, count($link_ids), '%d'));
     $links = $wpdb->get_results($wpdb->prepare(
         "SELECT * FROM $links_table WHERE id IN ($placeholders) ORDER BY category_slug, id ASC",
         ...$link_ids
     ));
 
-    // Group by category
     $grouped = [];
     foreach ($links as $link) {
         $grouped[$link->category_slug][] = $link;
@@ -113,12 +105,13 @@ function lf_render_links_for_post($post_id)
         $layout = $cat && $cat->layout === 'horizontal' ? 'horizontal' : 'vertical';
         $out .= '<h3 class="linkfolio-category-heading">' . esc_html($cat_name) . '</h3>';
         if ($layout === 'horizontal') {
-            $out .= '<div class="linkfolio-row">';
+            $out .= '<div class="lf-link-horizontal-group">';
             $count = count($cat_links);
             foreach ($cat_links as $i => $link) {
                 $out .= lf_render_link_horizontal($link, $cat);
+                // Centered separator (not after last)
                 if ($i < $count - 1 && !empty($cat->separator)) {
-                    $out .= esc_html($cat->separator);
+                    $out .= '<span class="lf-link-sep">' . esc_html($cat->separator) . '</span>';
                 }
             }
             $out .= '</div>';
@@ -133,6 +126,7 @@ function lf_render_links_for_post($post_id)
     return $out;
 }
 
+// --- CATEGORY SHORTCODE RENDER ---
 function lf_render_links_for_category($category_slug)
 {
     global $wpdb;
@@ -150,13 +144,12 @@ function lf_render_links_for_category($category_slug)
 
     $out = '<h3 class="linkfolio-category-heading">' . esc_html($cat->name) . '</h3>';
     if ($cat->layout === 'horizontal') {
-        $out .= '<div class="linkfolio-row">';
+        $out .= '<div class="lf-link-horizontal-group">';
         $count = count($links);
         foreach ($links as $i => $link) {
             $out .= lf_render_link_horizontal($link, $cat);
-            if ($i < $count - 1 && !empty($cat->separator)) 
-            {
-                $out .= esc_html($cat->separator);
+            if ($i < $count - 1 && !empty($cat->separator)) {
+                $out .= '<span class="lf-link-sep">' . esc_html($cat->separator) . '</span>';
             }
         }
         $out .= '</div>';
