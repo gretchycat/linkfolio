@@ -39,3 +39,9 @@ function lf_scroll_to_element_script($id)
         });
     }
 }
+
+function lf_url_with_wbr($url) {
+    // Insert <wbr> after every slash
+    return str_replace('/', '/<wbr>', esc_html($url));
+}
+

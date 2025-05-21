@@ -68,7 +68,7 @@ function lf_render_link_vertical($link, $category)
     $out .= esc_html($d['label']);
     if ($d['display_url']) 
     {
-        $out .= ' <span class="lf-link-url">(' . esc_html($d['display_url']) . ')</span>';
+        $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['display_url'])) . ')</span>';
     }
     $out .= '</a>';
     if ($d['desc']) 
@@ -79,7 +79,7 @@ function lf_render_link_vertical($link, $category)
     return $out;
 }
 
-function lf_render_links_for_postX($post_id)
+function lf_render_links_for_post($post_id)
 {
     global $wpdb;
     $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
@@ -168,7 +168,7 @@ function lf_render_links_for_category($category_slug)
     return $out;
 }
 
-function lf_render_links_for_post($post_id) {
+function lf_render_links_for_post_old($post_id) {
     global $wpdb;
     $cat_table = $wpdb->prefix . 'linkfolio_link_categories';
     $link_table = $wpdb->prefix . 'linkfolio_links';
@@ -231,7 +231,7 @@ function lf_render_links_for_post($post_id) {
                 }
                 echo '<strong><a href="' . esc_url($link->url) . '" target="_blank">' . esc_html($link->label) . '</a></strong>';
                 if (!empty($cat->show_url)) {
-                    echo '<div style="font-size:0.85em;">(' . esc_html($link->url) . ')</div>';
+                    echo '<div style="font-size:0.85em;">(' .lf_url_with_wbr( esc_html($link->url)) . ')</div>';
                 }
                 if (!empty($cat->show_description) && $link->description) {
                     echo '<div style="font-size:0.85em;">' . esc_html($link->description) . '</div>';
@@ -249,7 +249,7 @@ function lf_render_links_for_post($post_id) {
                 }
                 echo '<strong><a href="' . esc_url($link->url) . '" target="_blank">' . esc_html($link->label) . '</a></strong>';
                 if (!empty($cat->show_url)) {
-                    echo ' <span style="font-size:0.85em;">(' . esc_html($link->url) . ')</span>';
+                    echo ' <span style="font-size:0.85em;">(' . lf_url_with_wbr(esc_html($link->url)) . ')</span>';
                 }
                 if (!empty($cat->show_description) && $link->description) {
                     echo '<div style="font-size:0.85em;margin-left:1.5em;">' . esc_html($link->description) . '</div>';
