@@ -86,7 +86,7 @@ function lf_render_link_vertical($link, $category)
         $out .= '</a>';
     } else
     {
-        e$out .= '<span style="color:#777;font-size:12px">no icon</span>';
+        $out .= '<span style="color:#777;font-size:12px">no icon</span>';
     }
     $out .= '</div>'; 
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
