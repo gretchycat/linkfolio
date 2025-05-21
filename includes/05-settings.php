@@ -59,10 +59,6 @@ function lf_render_linkfolio_page()
     #lf-markdown-docs li {
         display: list-item !important;
     }
-    </style>
-    EOF;
-    echo <<<EOF
-    <style>
     #lf-markdown-docs .lf-btn {
         display: inline-block;
         margin: 0 0.5em 0.5em 0;
