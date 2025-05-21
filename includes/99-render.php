@@ -132,8 +132,9 @@ function lf_render_links_for_post($post_id)
         $cat_name = $cat ? $cat->name : ucfirst($cat_slug);
         $layout = $cat && $cat->layout === 'horizontal' ? 'horizontal' : 'vertical';
         $out .= '<h3 class="linkfolio-category-heading">' . esc_html($cat_name) . '</h3>';
-        if ($layout === 'horizontal') {
-            i//$out .= '<div class="linkfolio-row">';
+        if ($layout === 'horizontal') 
+        {
+            //$out .= '<div class="linkfolio-row">';
             $out .= '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
             $count = count($cat_links);
             foreach ($cat_links as $i => $link) {
