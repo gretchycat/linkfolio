@@ -76,7 +76,6 @@ function lf_render_link_vertical($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $sep = !empty($category->separator) ? $category->separator : '•';
-    $out = '<li class="linkfolio-link linkfolio-vertical">';
     $out .= '<span class="lf-link-sep" style="margin-right:0.5em;">' . esc_html($sep) . '</span>';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
     if ($d['icon_url']) {
@@ -90,7 +89,6 @@ function lf_render_link_vertical($link, $category)
     if ($d['desc']) {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div>';
     }
-    $out .= '</li>';
     return $out;
 }
 
