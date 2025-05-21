@@ -106,3 +106,7 @@ add_action('admin_enqueue_scripts', function() {
     wp_enqueue_script('jquery');
     wp_enqueue_script('wp-api');
 });
+
+$plugins['linkfolio_shortcode'] = plugins_url('assets/linkfolio-tinymce.js', __FILE__);
+
+
