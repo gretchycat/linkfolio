@@ -1,0 +1,14 @@
+{
+  "apiVersion": 2,
+  "name": "linkfolio/shortcode",
+  "title": "Linkfolio Links",
+  "category": "widgets",
+  "icon": "admin-links",
+  "description": "Insert a Linkfolio category or links for this post.",
+  "attributes": {
+    "category": {
+      "type": "string"
+    }
+  },
+  "editorScript": "linkfolio-block-script"
+}

@@ -58,3 +58,35 @@ function lf_url_with_wbr($url) {
     return str_replace('/', '/<wbr>', esc_html($url));
 }
 
+function linkfolio_register_block()
+{
+    wp_register_script(
+        'linkfolio-block-script',
+        plugins_url('assets/block/index.js', __FILE__),
+        [ 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-api-fetch' ],
+        filemtime(plugin_dir_path(__FILE__) . 'assets/block/index.js')
+    );
+
+    register_block_type(
+        'linkfolio/shortcode',
+        array(
+            'editor_script' => 'linkfolio-block-script',
+        )
+    );
+}
+add_action('init', 'linkfolio_register_block');
+
+add_action('rest_api_init', function() {
+    register_rest_route('linkfolio/v1', '/categories', array(
+        'methods' => 'GET',
+        'callback' => function() {
+            global $wpdb;
+            $table = $wpdb->prefix . 'linkfolio_link_categories';
+            $rows = $wpdb->get_results("SELECT name, slug FROM $table ORDER BY name ASC");
+            return $rows;
+        },
+        'permission_callback' => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+});
