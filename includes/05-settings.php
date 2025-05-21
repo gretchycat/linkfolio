@@ -2,6 +2,7 @@
 // 05-settings.php
 defined('ABSPATH') || exit;
 require_once plugin_dir_path(__FILE__) . 'lib/Parsedown/Parsedown.php';
+require_once plugin_dir_path(__FILE__) . 'lib/Parsedown/ParsedownExtra.php';
 add_action('admin_menu', function () {
     add_menu_page(
         'Linkfolio',
