@@ -48,6 +48,7 @@ function lf_render_linkfolio_page()
     $admin_links_file = $base.'admin-links.md';
     $instructions_file = $base.'instructions.md';
 
+    echo '<div id="lf-markdown-docs">';
     echo <<<EOF
     <style>
     #lf-markdown-docs ul, #lf-markdown-docs ol {
@@ -83,7 +84,6 @@ function lf_render_linkfolio_page()
     }
     </style>
     EOF;
-    echo '<div id="lf-markdown-docs">';
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
