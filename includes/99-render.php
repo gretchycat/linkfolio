@@ -82,7 +82,7 @@ function lf_render_link_vertical($link, $category)
     {
         $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
  
-        $out .== '<img src="' . esc_url($d['icon_url']) . '" style="width:64px;height:64px;object-fit:cover;vertical-align:middle" alt="icon">';
+        $out .= '<img src="' . esc_url($d['icon_url']) . '" style="width:64px;height:64px;object-fit:cover;vertical-align:middle" alt="icon">';
         $out .= '</a>';
     } else
     {
