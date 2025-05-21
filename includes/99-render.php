@@ -95,15 +95,6 @@ function lf_render_link_vertical($link, $category)
 }
 
 /**
- * Helper: Break long URLs only at slashes.
- */
-function lf_url_with_wbr($url)
-{
-    // Insert <wbr> after each slash in the URL for nice line breaks.
-    return preg_replace('~(/)~', "$1<wbr>", $url);
-}
-
-/**
  * Render all links associated with a given post, grouped by category.
  */
 function lf_render_links_for_post($post_id)
