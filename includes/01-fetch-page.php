@@ -238,7 +238,7 @@ function lf_fetch_page_metadata($url)
 {
     $parts = parse_url($url);
     $scheme = strtolower($parts['scheme'] ?? '');
-    if ($scheme === 'mailto') i
+    if ($scheme === 'mailto') 
     {
         // Handle email special case
         return [
@@ -284,6 +284,6 @@ function lf_fetch_page_metadata($url)
     // For other non-web protocols, set a status or skip
     return [
         'status_code' => 298,
-        'icon_url' => '', // or a generic "link" icon
+        'icon_url' => '' // or a generic "link" icon
     ];
 }
