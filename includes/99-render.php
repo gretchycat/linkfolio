@@ -76,7 +76,6 @@ function lf_render_link_vertical($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $sep = !empty($category->separator) ? $category->separator : '•';
-    $out = '<div id="link_'.$id.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
         // icon block
     $out .= '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
     if ($icon_url)
@@ -93,13 +92,14 @@ function lf_render_link_vertical($link, $category)
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
     $out .= esc_html($d['label']);
     $out .= '</a><br/>';
-    if ($d['display_url']) {
+    if ($d['display_url']) 
+    {
         $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['href'])) . ')</span><br/>';
     }
-    if ($d['desc']) {
+    if ($d['desc']) 
+    {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div><br/>';
     }
-    $out .= '</div>';
     return $out;
 }
 
