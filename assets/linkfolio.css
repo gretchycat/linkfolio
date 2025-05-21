@@ -142,3 +142,26 @@ input[type="submit"].button {
     margin: 0 0.3em;
     align-self: center;
 }
+i
+.linkfolio-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2em; /* or adjust to taste */
+  flex-wrap: wrap; /* optional, allows wrapping on small screens */
+}
+
+.linkfolio-link.linkfolio-horizontal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0.5em;
+}
+
+.lf-separator {
+  align-self: center;
+  font-size: 2em;
+  margin: 0 0.5em;
+  user-select: none;
+  opacity: 0.7;
+}
