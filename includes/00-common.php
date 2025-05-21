@@ -90,3 +90,19 @@ add_action('rest_api_init', function() {
         }
     ));
 });
+
+add_action('admin_init', function () {
+    add_filter('mce_external_plugins', function ($plugins) {
+        $plugins['linkfolio_shortcode'] = plugins_url('assets/linkfolio-tinymce.js', __FILE__);
+        return $plugins;
+    });
+    add_filter('mce_buttons', function ($buttons) {
+        array_push($buttons, 'linkfolio_shortcode');
+        return $buttons;
+    });
+});
+
+add_action('admin_enqueue_scripts', function() {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('wp-api');
+});
