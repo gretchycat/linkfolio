@@ -57,15 +57,16 @@ function lf_render_link_horizontal($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
-    $out = '<span class="linkfolio-link linkfolio-horizontal">';
+    //$out = '<span class="linkfolio-link linkfolio-horizontal">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
-    $out .= '<div class="lf-link-horizontal" style="display:flex;flex-direction:column;align-items:center;gap:0.3em;">';
+    //$out .= '<div class="lf-link-horizontal" style="display:flex;flex-direction:column;align-items:center;gap:0.3em;">';
     if ($d['icon_url']) {
         $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;">';
     }
     $lab = mb_strlen($d['label']) > 20 ? mb_substr($d['label'],0,20).'…' : $d['label'];
-    $out .= '<span class="lf-link-label">' . esc_html($lab) . '</span>';
-    $out .= '</div></a></span>';
+    //$out .= '<span class="lf-link-label">' . esc_html($lab) . '</span>';
+    //$out .= '</div></a></span>';
+    $out .= '</a>';
     return $out;
 }
 
@@ -134,7 +135,7 @@ function lf_render_links_for_post($post_id)
             foreach ($cat_links as $i => $link) {
                 $out .= lf_render_link_horizontal($link, $cat);
                 if ($i < $count - 1 && !empty($cat->separator)) {
-                    $out .= '<span class="lf-separator">' . esc_html($cat->separator) . '</span>';
+                    $out .= esc_html($cat->separator);
                 }
             }
             $out .= '</div>';
@@ -174,7 +175,7 @@ function lf_render_links_for_category($category_slug)
         foreach ($links as $i => $link) {
             $out .= lf_render_link_horizontal($link, $cat);
             if ($i < $count - 1 && !empty($cat->separator)) {
-                $out .= '<span class="lf-separator">' . esc_html($cat->separator) . '</span>';
+                $out .= esc_html($cat->separator);
             }
         }
         $out .= '</div>';

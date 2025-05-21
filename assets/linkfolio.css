@@ -168,7 +168,7 @@ i
 
 
 body::after {
-  content: "linkfolio-css-loaded";
+  content: "linkfolio-css-loaded ";
   display: block;
   color: red;
 }
