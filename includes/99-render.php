@@ -59,17 +59,17 @@ function lf_render_link_horizontal($link, $category)
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
     //$out = '<span class="linkfolio-link linkfolio-horizontal">';
 
-    $out .= '<div style="text-align:center;">';
+    $out = '<div style="text-align:center;">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
     //$out .= '<div class="lf-link-horizontal" style="display:flex;flex-direction:column;align-items:center;gap:0.3em;">';
     if ($d['icon_url']) {
-        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;">i<br/>';
+        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;"><br/>';
     }
     $lab = mb_strlen($d['label']) > 20 ? mb_substr($d['label'],0,20).'…' : $d['label'];
     //$out .= '<span class="lf-link-label">' . esc_html($lab) . '</span>';
     $out .= esc_html($lab) ;
     //$out .= '</div></a></span>';
-    $out .= '</a>i</div>';
+    $out .= '</a></div>';
     return $out;
 }
 
@@ -134,7 +134,7 @@ function lf_render_links_for_post($post_id)
         $out .= '<h3 class="linkfolio-category-heading">' . esc_html($cat_name) . '</h3>';
         if ($layout === 'horizontal') {
             i//$out .= '<div class="linkfolio-row">';
-            $out .='<div style="display:flex; gap:1em; flex-wrap:wrap;">';
+            $out .= '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
             $count = count($cat_links);
             foreach ($cat_links as $i => $link) {
                 $out .= lf_render_link_horizontal($link, $cat);
@@ -175,7 +175,7 @@ function lf_render_links_for_category($category_slug)
     $out = '<h3 class="linkfolio-category-heading">' . esc_html($cat->name) . '</h3>';
     if ($cat->layout === 'horizontal') {
         //$out .= '<div class="linkfolio-row">';
-        $out .='<div style="display:flex; gap:1em; flex-wrap:wrap;">';
+        $out .= '<div style="display:flex; gap:1em; flex-wrap:wrap;">';
         $count = count($links);
         foreach ($links as $i => $link) {
             $out .= lf_render_link_horizontal($link, $cat);
