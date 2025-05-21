@@ -77,6 +77,8 @@ function lf_render_link_vertical($link, $category)
     $d = lf_prepare_link_display($link, $category);
     $sep = !empty($category->separator) ? $category->separator : '•';
         // icon block
+    
+    $out = '<div id="link_'.0.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
     $out .= '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
     if ($d['icon_url'])
     {
@@ -100,6 +102,7 @@ function lf_render_link_vertical($link, $category)
     {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div><br/>';
     }
+    $out .= '</div>';
     return $out;
 }
 
