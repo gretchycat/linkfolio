@@ -57,18 +57,14 @@ function lf_render_link_horizontal($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
-    //$out = '<span class="linkfolio-link linkfolio-horizontal">';
-
     $out = '<div style="text-align:center;">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
-    //$out .= '<div class="lf-link-horizontal" style="display:flex;flex-direction:column;align-items:center;gap:0.3em;">';
-    if ($d['icon_url']) {
+    if ($d['icon_url']) 
+    {
         $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;"><br/>';
     }
     $lab = mb_strlen($d['label']) > 20 ? mb_substr($d['label'],0,20).'…' : $d['label'];
-    //$out .= '<span class="lf-link-label">' . esc_html($lab) . '</span>';
     $out .= esc_html($lab) ;
-    //$out .= '</div></a></span>';
     $out .= '</a></div>';
     return $out;
 }
@@ -87,7 +83,7 @@ function lf_render_link_vertical($link, $category)
         $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="" class="lf-linkfolio-icon" style="height:1em;width:1em;vertical-align:middle;margin-right:0.4em;">';
     }
     $out .= esc_html($d['label']);
-    $out .= '</a>';
+    $out .= '</a><br/>';
     if ($d['display_url']) {
         $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['href'])) . ')</span>';
     }
@@ -127,7 +123,8 @@ function lf_render_links_for_post($post_id)
     }
 
     $out = '';
-    foreach ($grouped as $cat_slug => $cat_links) {
+    foreach ($grouped as $cat_slug => $cat_links) 
+    {
         $cat = $wpdb->get_row($wpdb->prepare("SELECT * FROM $cat_table WHERE slug = %s", $cat_slug));
         $cat_name = $cat ? $cat->name : ucfirst($cat_slug);
         $layout = $cat && $cat->layout === 'horizontal' ? 'horizontal' : 'vertical';
