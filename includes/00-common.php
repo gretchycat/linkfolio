@@ -8,7 +8,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
 });
 
 // Define available bullet/separator characters globally
-if (!defined('LF_SEPARATORS')) {
+if (!defined('LF_SEPARATORS'))
+{
     define('LF_SEPARATORS', [' ','•','★','*','–','◯','■','◆','◇','✔','♠','♥','♦','♣','⬤','⬛','⬜','⬟','⬢','⬡','⬠','⬣']);
 }
 
