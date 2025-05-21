@@ -78,7 +78,7 @@ function lf_render_link_vertical($link, $category)
     $sep = !empty($category->separator) ? $category->separator : '•';
         // icon block
     
-    $out = '<div id="link_'.0.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
+    $out = '<div id="link_0" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
     $out .= '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
     if ($d['icon_url'])
     {
