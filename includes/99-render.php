@@ -12,6 +12,162 @@ add_filter('the_content', function ($content) {
     return $content;
 });
 
+function lf_prepare_link_display($link, $category)
+{
+    // Label: prefer label, else fallback to domain from URL
+    $label = trim($link->label);
+    if ($label === '') {
+        // Fallback: show domain only
+        $host = parse_url($link->url, PHP_URL_HOST);
+        $label = $host ?: $link->url;
+    }
+
+    // Display URL: truncated for display, raw for href
+    $display_url = $link->url;
+    $maxlen = 20;
+    if (mb_strlen($display_url) > $maxlen) {
+        $display_url = mb_substr($display_url, 0, $maxlen) . '…';
+    }
+
+    // Only pass through *values*; do not generate HTML
+    return [
+        'icon_url'     => (!empty($category->show_icon) && !empty($link->icon_url)) ? $link->icon_url : '',
+        'label'        => $label,
+        'display_url'  => !empty($category->show_url) ? $display_url : '',
+        'href'         => $link->url,
+        'desc'         => (!empty($category->show_description) && $link->description) ? $link->description : '',
+    ];
+}
+
+function lf_render_link_horizontal($link, $category)
+{
+    $d = lf_prepare_link_display($link, $category);
+    $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
+    $out = '<span class="linkfolio-link linkfolio-horizontal">';
+    $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
+    if ($d['icon_url']) {
+        $out .= '<div class="lf-link-icon" style="text-align:center;"><img src="' . esc_url($d['icon_url']) . '" alt="" style="height:1.2em;vertical-align:middle;"></div>';
+    }
+    $out .= '<div class="lf-link-label" style="display:block;">' . esc_html($d['label']) . '</div>';
+    $out .= '</a>';
+    $out .= '</span>';
+    return $out;
+}
+
+function lf_render_link_vertical($link, $category)
+{
+    $d = lf_prepare_link_display($link, $category);
+    $sep = !empty($category->separator) ? $category->separator : '•';
+    $out = '<li class="linkfolio-link linkfolio-vertical">';
+    $out .= '<span class="lf-link-sep" style="margin-right:0.5em;">' . esc_html($sep) . '</span>';
+    $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
+    if ($d['icon_url']) 
+    {
+        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="" style="height:1em;vertical-align:middle;margin-right:0.4em;">';
+    }
+    $out .= esc_html($d['label']);
+    if ($d['display_url']) 
+    {
+        $out .= ' <span class="lf-link-url">(' . esc_html($d['display_url']) . ')</span>';
+    }
+    $out .= '</a>';
+    if ($d['desc']) 
+    {
+        $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div>';
+    }
+    $out .= '</li>';
+    return $out;
+}
+
+function lf_render_links_for_postX($post_id)
+{
+    global $wpdb;
+    $assoc_table = $wpdb->prefix . 'linkfolio_link_post_map';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
+    $cat_table   = $wpdb->prefix . 'linkfolio_link_categories';
+
+    // Get all link IDs for this post
+    $link_ids = $wpdb->get_col($wpdb->prepare(
+        "SELECT link_id FROM $assoc_table WHERE post_id = %d", $post_id
+    ));
+    if (empty($link_ids)) return '';
+
+    // Fetch links, ordered by category then id
+    $placeholders = implode(',', array_fill(0, count($link_ids), '%d'));
+    $links = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $links_table WHERE id IN ($placeholders) ORDER BY category_slug, id ASC",
+        ...$link_ids
+    ));
+
+    // Group by category
+    $grouped = [];
+    foreach ($links as $link) {
+        $grouped[$link->category_slug][] = $link;
+    }
+
+    $out = '';
+    foreach ($grouped as $cat_slug => $cat_links) {
+        $cat = $wpdb->get_row($wpdb->prepare("SELECT * FROM $cat_table WHERE slug = %s", $cat_slug));
+        $cat_name = $cat ? $cat->name : ucfirst($cat_slug);
+        $layout = $cat && $cat->layout === 'horizontal' ? 'horizontal' : 'vertical';
+        $out .= '<h3 class="linkfolio-category-heading">' . esc_html($cat_name) . '</h3>';
+        if ($layout === 'horizontal') {
+            $out .= '<div class="linkfolio-row">';
+            $count = count($cat_links);
+            foreach ($cat_links as $i => $link) {
+                $out .= lf_render_link_horizontal($link, $cat);
+                if ($i < $count - 1 && !empty($cat->separator)) {
+                    $out .= '<span class="linkfolio-separator" style="margin:0 0.5em;">' . esc_html($cat->separator) . '</span>';
+                }
+            }
+            $out .= '</div>';
+        } else {
+            $out .= '<ul class="linkfolio-column">';
+            foreach ($cat_links as $link) {
+                $out .= lf_render_link_vertical($link, $cat);
+            }
+            $out .= '</ul>';
+        }
+    }
+    return $out;
+}
+
+function lf_render_links_for_category($category_slug)
+{
+    global $wpdb;
+    $cat_table   = $wpdb->prefix . 'linkfolio_link_categories';
+    $links_table = $wpdb->prefix . 'linkfolio_links';
+
+    $cat = $wpdb->get_row($wpdb->prepare("SELECT * FROM $cat_table WHERE slug = %s", $category_slug));
+    if (!$cat) return '';
+
+    $links = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $links_table WHERE category_slug = %s ORDER BY id ASC",
+        $category_slug
+    ));
+    if (!$links) return '';
+
+    $out = '<h3 class="linkfolio-category-heading">' . esc_html($cat->name) . '</h3>';
+    if ($cat->layout === 'horizontal') {
+        $out .= '<div class="linkfolio-row">';
+        $count = count($links);
+        foreach ($links as $i => $link) {
+            $out .= lf_render_link_horizontal($link, $cat);
+            if ($i < $count - 1 && !empty($cat->separator)) {
+                $out .= '<span class="linkfolio-separator" style="margin:0 0.5em;">' . esc_html($cat->separator) . '</span>';
+            }
+        }
+        $out .= '</div>';
+    } else {
+        $out .= '<ul class="linkfolio-column">';
+        foreach ($links as $link) {
+            $out .= lf_render_link_vertical($link, $cat);
+        }
+        $out .= '</ul>';
+    }
+    return $out;
+}
+
 function lf_render_links_for_post($post_id) {
     global $wpdb;
     $cat_table = $wpdb->prefix . 'linkfolio_link_categories';

@@ -10,6 +10,7 @@ if (!class_exists('ParsedownExtra'))
 {
     require_once plugin_dir_path(__FILE__) . 'lib/parsedown-extra/ParsedownExtra.php';
 }
+
 add_action('admin_menu', function () {
     add_menu_page(
         'Linkfolio',
