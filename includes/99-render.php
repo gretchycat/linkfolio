@@ -204,3 +204,22 @@ function lf_render_links_for_category($category_slug)
     return $out;
 }
 
+// [linkfolio category="social"]
+add_shortcode('linkfolio', function ($atts) {
+    $a = shortcode_atts([
+        'category' => '',
+        'post_id' => '',
+    ], $atts);
+
+    if (!empty($a['category'])) {
+        return lf_render_links_for_category($a['category']);
+    }
+    if (!empty($a['post_id'])) {
+        return lf_render_links_for_post((int)$a['post_id']);
+    }
+    // Default: current post, if in the loop
+    if (in_the_loop()) {
+        return lf_render_links_for_post(get_the_ID());
+    }
+    return '';
+});
