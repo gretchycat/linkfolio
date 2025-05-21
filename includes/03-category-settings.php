@@ -3,13 +3,6 @@
 
 defined('ABSPATH') || exit;
 
-// Enqueue admin styles
-add_action('admin_enqueue_scripts', function ($hook) {
-    if (strpos($hook, 'linkfolio') !== false) {
-        wp_enqueue_style('linkfolio-admin-style', plugin_dir_url(__DIR__) . 'assets/admin.css');
-    }
-});
-
 // Render the c=ategory settings subpage
 function lf_render_category_settings_page() {
     echo '<div class="wrap lf-category-settings-wrap">';

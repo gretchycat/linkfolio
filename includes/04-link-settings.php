@@ -2,13 +2,6 @@
 // 04-link-settings.php
 defined('ABSPATH') || exit;
 
-// Enqueue admin styles
-add_action('admin_enqueue_scripts', function ($hook) {
-    if (strpos($hook, 'linkfolio') !== false) {
-        wp_enqueue_style('linkfolio-admin-style', plugin_dir_url(__DIR__) . 'assets/admin.css');
-    }
-});
-
 // Main Linkfolio settings page
 function lf_render_link_settings_page()
 {
