@@ -84,10 +84,10 @@ function lf_render_link_vertical($link, $category)
     $out .= esc_html($d['label']);
     $out .= '</a><br/>';
     if ($d['display_url']) {
-        $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['href'])) . ')</span>';
+        $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['href'])) . ')</span><br/>';
     }
     if ($d['desc']) {
-        $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div>';
+        $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div><br/>';
     }
     return $out;
 }
