@@ -65,7 +65,7 @@ function lf_render_link_horizontal($link, $category)
     }
     $lab = mb_strlen($d['label']) > 20 ? mb_substr($d['label'],0,20).'…' : $d['label'];
     //$out .= '<span class="lf-link-label">' . esc_html($lab) . '</span>';
-    $out .=. esc_html($lab) ;
+    $out .= esc_html($lab) ;
     //$out .= '</div></a></span>';
     $out .= '</a>';
     return $out;
