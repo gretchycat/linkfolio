@@ -63,14 +63,14 @@ function lf_render_link_vertical($link, $category)
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
     if ($d['icon_url']) 
     {
-        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="" style="height:1em;vertical-align:middle;margin-right:0.4em;">';
+        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="" style="height:1em;width:1em;vertical-align:middle;margin-right:0.4em;">';
     }
     $out .= esc_html($d['label']);
+    $out .= '</a><br/>';
     if ($d['display_url']) 
     {
         $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['display_url'])) . ')</span>';
     }
-    $out .= '</a>';
     if ($d['desc']) 
     {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div>';
