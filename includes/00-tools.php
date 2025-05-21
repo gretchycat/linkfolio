@@ -1,7 +1,7 @@
 <?PHP
 // Define available bullet/separator characters globally
 if (!defined('LF_SEPARATORS')) {
-    define('LF_SEPARATORS', [i' ','•','★','*','–','◯','■','◆','◇','✔','♠','♥','♦','♣','⬤','⬛','⬜','⬟','⬢','⬡','⬠','⬣']);
+    define('LF_SEPARATORS', [' ','•','★','*','–','◯','■','◆','◇','✔','♠','♥','♦','♣','⬤','⬛','⬜','⬟','⬢','⬡','⬠','⬣']);
 }
 
 add_action('admin_footer', function () {

@@ -45,10 +45,11 @@ function lf_render_link_horizontal($link, $category)
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
     $out = '<span class="linkfolio-link linkfolio-horizontal">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
+    $out .= '<div class="lf-link-horizontal" style="text-align:center;">';
     if ($d['icon_url']) {
-        $out .= '<div class="lf-link-icon" style="text-align:center;"><img src="' . esc_url($d['icon_url']) . '" alt="" style="height:1.2em;vertical-align:middle;"></div>';
+        $out .='<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" style="height:3em;width:3em;vertical-align:middle;"><br/>';
     }
-    $out .= '<div class="lf-link-label" style="display:block;">' . esc_html($d['label']) . '</div>';
+    $out .= esc_html($d['label']);
     $out .= '</a>';
     $out .= '</span>';
     return $out;
