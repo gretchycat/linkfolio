@@ -1,4 +1,8 @@
 <?PHP
+// Define available bullet/separator characters globally
+if (!defined('LF_SEPARATORS')) {
+    define('LF_SEPARATORS', [i' ','•','★','*','–','◯','■','◆','◇','✔','♠','♥','♦','♣','⬤','⬛','⬜','⬟','⬢','⬡','⬠','⬣']);
+}
 
 add_action('admin_footer', function () {
     ?>

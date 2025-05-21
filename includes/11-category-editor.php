@@ -26,7 +26,7 @@ function lf_render_category_row_editor($cat) {
 
     echo '<label class="lf-cat-label">Separator:&nbsp;<select name="separator_' . $id . '" class="lf-cat-input-select">';
     $separators = ['•', '★', '*', '–', '◯', '■', '◆', '◇', '✔', '♠', '♥', '♦', '♣', '⬤', '⬛', '⬜', '⬟', '⬢', '⬡', '⬠', '⬣'];
-    foreach ($separators as $sep) {
+    foreach (LF_SEPERATORS as $sep) {
         $selected = ($cat->separator === $sep) ? ' selected' : '';
         echo '<option value="' . esc_attr($sep) . '"' . $selected . '>' . esc_html($sep) . '</option>';
     }
