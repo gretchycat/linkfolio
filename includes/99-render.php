@@ -76,11 +76,21 @@ function lf_render_link_vertical($link, $category)
 {
     $d = lf_prepare_link_display($link, $category);
     $sep = !empty($category->separator) ? $category->separator : '•';
-    $out .= '<span class="lf-link-sep" style="margin-right:0.5em;">' . esc_html($sep) . '</span>';
-    $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
-    if ($d['icon_url']) {
-        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="" class="lf-linkfolio-icon" style="height:1em;width:1em;vertical-align:middle;margin-right:0.4em;">';
+    $out = '<div id="link_'.$id.'" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
+        // icon block
+    $out .= '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
+    if ($icon_url)
+    {
+        $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
+ 
+        $out .== '<img src="' . esc_url($d['icon_url']) . '" style="width:64px;height:64px;object-fit:cover;vertical-align:middle" alt="icon">';
+        $out .= '</a>';
+    } else
+    {
+        e$out .= '<span style="color:#777;font-size:12px">no icon</span>';
     }
+    $out .= '</div>'; 
+    $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
     $out .= esc_html($d['label']);
     $out .= '</a><br/>';
     if ($d['display_url']) {
@@ -89,6 +99,7 @@ function lf_render_link_vertical($link, $category)
     if ($d['desc']) {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div><br/>';
     }
+    $out .= '</div>';
     return $out;
 }
 
