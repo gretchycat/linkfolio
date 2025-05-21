@@ -1,8 +1,15 @@
 <?php
 // 05-settings.php
 defined('ABSPATH') || exit;
-require_once plugin_dir_path(__FILE__) . 'lib/Parsedown/Parsedown.php';
-require_once plugin_dir_path(__FILE__) . 'lib/parsedown-extra/ParsedownExtra.php';
+if (!class_exists('Parsedown'))
+{
+    require_once plugin_dir_path(__FILE__) . 'lib/Parsedown/Parsedown.php';
+}
+
+if (!class_exists('ParsedownExtra'))
+{
+    require_once plugin_dir_path(__FILE__) . 'lib/parsedown-extra/ParsedownExtra.php';
+}
 add_action('admin_menu', function () {
     add_menu_page(
         'Linkfolio',
