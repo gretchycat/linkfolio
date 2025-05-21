@@ -47,9 +47,10 @@ function lf_render_linkfolio_page()
     $about_file = $base.'about.md';
     $admin_links_file = $base.'admin-links.md';
     $instructions_file = $base.'instructions.md';
+    echo '<code>';
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
+    echo '</code>';
 
-    
 }
