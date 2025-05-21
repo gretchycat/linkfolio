@@ -69,7 +69,7 @@ function lf_render_link_vertical($link, $category)
     $out .= '</a><br/>';
     if ($d['display_url']) 
     {
-        $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['display_url'])) . ')</span>';
+        $out .= ' <span class="lf-link-url">(' . lf_url_with_wbr(esc_html($d['href'])) . ')</span>';
     }
     if ($d['desc']) 
     {
