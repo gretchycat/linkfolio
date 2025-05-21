@@ -60,6 +60,29 @@ function lf_render_linkfolio_page()
     }
     </style>
     EOF;
+    echo <<<EOF
+    <style>
+    #lf-markdown-docs .lf-btn {
+        display: inline-block;
+        margin: 0 0.5em 0.5em 0;
+        padding: 0.5em 1.2em;
+        background: #2271b1;
+        color: #fff !important;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1em;
+        transition: background 0.2s;
+        cursor: pointer;
+    }
+    #lf-markdown-docs .lf-btn:hover, #lf-markdown-docs .lf-btn:focus {
+        background: #005177;
+        color: #fff !important;
+        text-decoration: none;
+    }
+    </style>
+    EOF;
     echo '<div id="lf-markdown-docs">';
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
