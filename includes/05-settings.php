@@ -46,7 +46,7 @@ function lf_render_linkfolio_page()
     $base= plugin_dir_path(__DIR__) . 'docs/';
     $about_file = $base.'about.md';
     $admin_links_file = $base.'admin-links.md';
-    $instructions_file = $base.'instructionsc.md';
+    $instructions_file = $base.'instructions.md';
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
