@@ -91,7 +91,7 @@ function lf_render_link_vertical($link, $category)
         $out .= '<span style="color:#777;font-size:12px">no icon</span>';
     }
     $out .= '</div>'; 
-    $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
+    $out .= '<div><a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
     $out .= esc_html($d['label']);
     $out .= '</a><br/>';
     if ($d['display_url']) 
@@ -102,6 +102,7 @@ function lf_render_link_vertical($link, $category)
     {
         $out .= '<div class="lf-link-desc" style="font-size:0.9em;opacity:0.8;margin-left:2em;">' . esc_html($d['desc']) . '</div><br/>';
     }
+    $out .= '</div>';
     $out .= '</div>';
     return $out;
 }
