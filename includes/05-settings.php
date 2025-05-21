@@ -47,8 +47,16 @@ function lf_render_linkfolio_page()
     $about_file = $base.'about.md';
     $admin_links_file = $base.'admin-links.md';
     $instructions_file = $base.'instructions.md';
+    echo <<<EOF
+    <style>
+        ul { list-style-type: disc !important; margin-left: 2em !important; }
+        li { display: list-item !important; }
+    </style>
+    EOF;
     echo $parsedown->text(file_get_contents($about_file));
     echo $parsedown->text(file_get_contents($admin_links_file));
     echo $parsedown->text(file_get_contents($instructions_file));
+
+    echo '<ul style="list-style-type:disc; margin-left:2em;"><li>Test</li></ul>';
 
 }
