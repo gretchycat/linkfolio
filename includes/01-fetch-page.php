@@ -224,38 +224,66 @@ function lf_get_icon_for_url($page_url)
     return ''; // fallback, or your default icon
 }
 
+function lf_get_mailto_icon() {
+    // Try to find a 'mailto.png' in the media library
+    $icon_id = attachment_url_to_postid( plugins_url( 'assets/mailto.png', __DIR__ ) );
+    if ($icon_id) {
+        return wp_get_attachment_url($icon_id);
+    }
+    // Fallback to bundled asset
+    return plugins_url('assets/mailto.png', __DIR__);
+}
+
 function lf_fetch_page_metadata($url)
 {
-    $response = wp_remote_get($url, [
-        'timeout' => 8,
-        'headers' => [
-            'User-Agent' => 'Mozilla/5.0 (compatible; Linkfolio/1.0; +https://hopefaithless.xyz/)',
-            'Referer' => home_url(),
-        ]
-    ]);
-    if (is_wp_error($response) || empty($response['body'])) {
+    $parts = parse_url($url);
+    $scheme = strtolower($parts['scheme'] ?? '');
+    if ($scheme === 'mailto') i
+    {
+        // Handle email special case
         return [
-            'title' => '',
-            'icon_url' => '',
-            'status_code' => 499,
+            'status_code' => 299,
+            'icon_url' => lf_get_mailto_icon(), // See below
+        ];
+    } 
+    elseif ($scheme === 'http' || $scheme === 'https') 
+    {
+        $response = wp_remote_get($url, [
+            'timeout' => 8,
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (compatible; Linkfolio/1.0; +https://hopefaithless.xyz/)',
+                'Referer' => home_url(),
+            ]
+        ]);
+        if (is_wp_error($response) || empty($response['body'])) {
+            return [
+                'title' => '',
+                'icon_url' => '',
+                'status_code' => 499,
+            ];
+        }
+
+        $html = $response['body'];
+        $status_code = wp_remote_retrieve_response_code($response);
+
+        // Get title
+        $title = '';
+        if (preg_match('/<title>(.*?)<\/title>/is', $html, $m)) {
+            $title = trim($m[1]);
+        }
+
+        // Get best icon image URL
+        $icon_url = lf_get_icon_for_url($url); // or $page_url as appropriate
+
+        return [
+            'title' => $title,
+            'icon_url' => $icon_url,
+            'status_code' => (int)$status_code,
         ];
     }
-
-    $html = $response['body'];
-    $status_code = wp_remote_retrieve_response_code($response);
-
-    // Get title
-    $title = '';
-    if (preg_match('/<title>(.*?)<\/title>/is', $html, $m)) {
-        $title = trim($m[1]);
-    }
-
-    // Get best icon image URL
-    $icon_url = lf_get_icon_for_url($url); // or $page_url as appropriate
-
+    // For other non-web protocols, set a status or skip
     return [
-        'title' => $title,
-        'icon_url' => $icon_url,
-        'status_code' => (int)$status_code,
+        'status_code' => 298,
+        'icon_url' => '', // or a generic "link" icon
     ];
 }
