@@ -10,7 +10,8 @@ function lf_render_category_row_view($cat) {
 
     // First line: name, layout, separator
     echo '<div class="lf-category-line1">';
-    echo '<strong>' . esc_html($cat->name) . '</strong>';
+    echo '<strong>' . esc_html($cat->name) . '</strong>   ';
+    echo '<small>(' . esc_html($cat->slug) . ')</smal;>';
     echo ' &nbsp; Layout: <span>' . esc_html($cat->layout) . '</span>';
     echo ' &nbsp; Separator: <span>"' . esc_html($cat->separator) . '"</span>';
     echo '</div>';

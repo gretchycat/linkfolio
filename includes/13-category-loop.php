@@ -2,7 +2,8 @@
 
 defined('ABSPATH') || exit;
 
-function lf_render_all_categories() {
+function lf_render_all_categories() 
+{
     global $wpdb;
     $table = $wpdb->prefix . 'linkfolio_link_categories';
 
@@ -20,21 +21,25 @@ function lf_render_all_categories() {
 
     echo '<form method="post">';
 
-    foreach ($rows as $row) {
+    foreach ($rows as $row) 
+    {
         $id = (int)$row->id;
 
         $editing = isset($_POST["edit_$id"]) &&
                    !isset($_POST["cancel_triggered_$id"]) &&
                    !isset($_POST["saved_$id"]);
 
-        if ($editing) {
+        if ($editing) 
+        {
             lf_render_category_row_editor($row);
-        } else {
+        } else 
+        {
             lf_render_category_row_view($row);
         }
     }
 
-    if (isset($_POST['add_new_category'])) {
+    if (isset($_POST['add_new_category'])) 
+    {
         lf_render_category_row_editor((object) [
             'id' => 'new',
             'name' => '',
