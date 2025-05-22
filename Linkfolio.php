@@ -87,3 +87,14 @@ add_action('admin_enqueue_scripts', function() {
 
 $plugins['linkfolio_shortcode'] = plugins_url('assets/linkfolio-tinymce.js', __FILE__);
 
+// Add TinyMCE external plugin
+add_filter('mce_external_plugins', function($plugins) {
+    $plugins['linkfolio'] = plugin_dir_url(__FILE__) . 'assets/linkfolio-tinymce.js';
+    return $plugins;
+});
+
+// Add the button
+add_filter('mce_buttons', function($buttons) {
+    array_push($buttons, 'linkfolio');
+    return $buttons;
+});
