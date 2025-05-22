@@ -166,9 +166,3 @@ i
   opacity: 0.7;
 }
 
-
-body::after {
-  content: "linkfolio-css-loaded ";
-  display: block;
-  color: red;
-}
