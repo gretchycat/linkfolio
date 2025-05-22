@@ -27,3 +27,16 @@
     });
     tinymce.PluginManager.add('linkfolio_shortcode', tinymce.plugins.linkfolio_shortcode);
 })();
+
+(function() {
+    tinymce.PluginManager.add('linkfolio', function(editor, url) {
+        editor.addButton('linkfolio', {
+            text: 'Linkfolio',
+            icon: false,
+            onclick: function() {
+                // Insert the shortcode at the cursor
+                editor.insertContent('[linkfolio]');
+            }
+        });
+    });
+})();
