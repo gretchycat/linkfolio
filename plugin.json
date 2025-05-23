@@ -4,11 +4,11 @@
   "version": "0.1.5",
   "description": "Manage, categorize, and scan links across your site with bulk actions and metadata detection.",
   "author": "Gretchen Maculo",
-  "author_uri": "https://hopefaithless.42web.io",
-  "plugin_uri": "https://hopefaithless.42web.io/linkfolio",
-  "homepage": "https://hopefaithless.42web.io/linkfolio",
-  "support": "https://hopefaithless.42web.io/contact",
-  "license": "GPL2+",
+  "author_uri": "https://hopefaithless.xyz",
+  "plugin_uri": "https://hopefaithless.xyz/linkfolio",
+  "homepage": "https://hopefaithless.xyz/linkfolio",
+  "support": "https://hopefaithless.xyz/contact",
+  "license": 'MIT',
   "contributors": ["gretchycat"],
   "tags": ["links", "utilities", "scan", "metadata", "admin"]
 }
