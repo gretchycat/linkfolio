@@ -38,4 +38,4 @@ This plugin is open source under the MIT License.
 ## Author
 
 Gretchen Maculo  
-[hopefaithless.42web.io](https://hopefaithless.42web.io)
+[hopefaithless.xyz](https://hopefaithless.xyz)
