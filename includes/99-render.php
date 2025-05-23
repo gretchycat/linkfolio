@@ -61,7 +61,7 @@ function lf_render_link_horizontal($link, $category)
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
     if ($d['icon_url']) 
     {
-        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).'" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;"><br/>';
+        $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).' icon" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;"><br/>';
     }
     $lab = mb_strlen($d['label']) > 20 ? mb_substr($d['label'],0,20).'…' : $d['label'];
     $out .= esc_html($lab) ;
