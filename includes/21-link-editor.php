@@ -2,11 +2,11 @@
 // link-editor.php
 defined('ABSPATH') || exit;
 
-if (!defined('LM_PLUGIN_PATH')) {
-    define('LM_PLUGIN_PATH', plugin_dir_path(__FILE__));
+if (!defined('LF_PLUGIN_PATH')) {
+    define('LF_PLUGIN_PATH', plugin_dir_path(__FILE__));
 }
-if (!defined('LM_PLUGIN_URL')) {
-    define('LM_PLUGIN_URL', plugin_dir_url(__FILE__));
+if (!defined('LF_PLUGIN_URL')) {
+    define('LF_PLUGIN_URL', plugin_dir_url(__FILE__));
 }
 
 function lf_render_link_row_editor($link) {
@@ -21,7 +21,7 @@ function lf_render_link_row_editor($link) {
 
     $icon_id = "icon_$id";
     $icon_url = esc_attr($link->icon_url);
-    $placeholder = LM_PLUGIN_URL . 'assets/placeholder.png';
+    $placeholder = LF_PLUGIN_URL . 'assets/placeholder.png';
 
     echo '<div id="edit_link_' . $id . '" class="lf-link-editor">';
     
