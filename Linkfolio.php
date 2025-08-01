@@ -1,14 +1,14 @@
 <?php
 /*
 Plugin Name: Linkfolio
-Plugin URI: https://hopefaithless.42web.io/linkfolio
+Plugin URI: https://hopefaithless.xyz/linkfolio
 Description: Manage, categorize, and scan links across your site with bulk actions and metadata detection.
 Version: 0.1.5
 Author: Gretchen Maculo
-Author URI: https://hopefaithless.42web.io
-License: GPL2+
+Author URI: https://hopefaithless.xyz
+License: MIT
 Text Domain: Linkfolio
-# Support: https://hopefaithless.42web.io/contact
+# Support: https://hopefaithless.xyz/contact
 */
 defined('ABSPATH') || exit;
 // Define constants early

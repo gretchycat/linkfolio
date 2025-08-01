@@ -8,7 +8,7 @@
   "plugin_uri": "https://hopefaithless.xyz/linkfolio",
   "homepage": "https://hopefaithless.xyz/linkfolio",
   "support": "https://hopefaithless.xyz/contact",
-  "license": 'MIT',
+  "license": "MIT",
   "contributors": ["gretchycat"],
   "tags": ["links", "utilities", "scan", "metadata", "admin"]
 }

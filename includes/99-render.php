@@ -59,6 +59,12 @@ function lf_render_link_horizontal($link, $category)
     $tooltip = esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : ''));
     $out = '<div style="text-align:center;">';
     $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . $tooltip . '" class="linkfolio-hlink">';
+    if (!$d['icon_url'])
+    {
+        $pos = strpos($d['href'], ':');
+        $prot = ($pos !== false) ? substr($d['href'], 0, $pos) : 'none';
+        $d['icon_url']=plugins_url('assets/'.strtolower($prot).'.png', __DIR__);
+    }
     if ($d['icon_url']) 
     {
         $out .= '<img src="' . esc_url($d['icon_url']) . '" alt="'.esc_html($d['label']).' icon" class="lf-linkfolio-icon" style="width:3em;height:3em;object-fit:contain;margin-bottom:0.2em;"><br/>';
