@@ -86,6 +86,12 @@ function lf_render_link_vertical($link, $category)
     
     $out = '<div id="link_0" class="lf-link-viewer" style="display:flex;align-items:flex-start;margin-bottom:1em;gap:1em">';
     $out .= '<div class="lf-link-icon" style="flex-shrink:0;width:64px;height:64px;overflow:hidden;border-radius:8px;text-align:center;line-height:64px">';
+    if (!$d['icon_url'])
+    {
+        $pos = strpos($d['href'], ':');
+        $prot = ($pos !== false) ? substr($d['href'], 0, $pos) : 'none';
+        $d['icon_url']=plugins_url('assets/'.strtolower($prot).'.png', __DIR__);
+    }
     if ($d['icon_url'])
     {
         $out .= '<a href="' . esc_url($d['href']) . '" target="_blank" rel="noopener" title="' . esc_attr($d['href'] . ($d['desc'] ? ' — ' . strip_tags($d['desc']) : '')) . '" class="linkfolio-vlink">';
